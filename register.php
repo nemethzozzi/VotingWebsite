@@ -13,7 +13,7 @@
         </nav>
     </header>
     <div class="registration-container">
-        <h2>Register</h2>
+        <h2>Registration</h2>
         <form action="register.php" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>

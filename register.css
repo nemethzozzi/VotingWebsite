@@ -2,17 +2,26 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #141414;
+    background-color: #2A2B36;
     color: #fff;
+    display: flex; /* Center vertically and horizontally */
+    flex-direction: column; /* Make content stack vertically */
+    justify-content: flex-start; /* Align content to the top */
+    align-items: center;
+    min-height: 100vh; /* Make the body full-height */
 }
 
 header {
-    background-color: #141414;
+    background-color: #41475e6b;
     padding: 20px;
+    width: 100%; /* Occupy full width */
+    position: fixed; /* Fixed position to keep it at the top */
+    top: 0; /* Stick to the top */
 }
 
 nav ul {
@@ -32,16 +41,16 @@ nav a {
 }
 
 nav a:hover {
-    color: #e50914;
+    color: #c4dea4;
 }
 
 .registration-container {
-    width: 300px;
-    margin: 0 auto;
+    width: 400px;
+    margin: 140px auto 0; /* Margin from the top to create space below the header */
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #41475E;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 10px #50577A;
     text-align: center;
 }
 
@@ -64,20 +73,21 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     border: none;
-    border-radius: 3px;
+    border-radius: 6px;
     font-size: 16px;
-    background-color: #333;
+    background-color: #50577A;
     color: #fff;
 }
 
 button[type="submit"] {
     display: block;
-    width: 100%;
+    margin: 20px auto; /* Center the button horizontally and add more space */
+    width: 50%; /* Make the button slightly wider */
     padding: 10px;
-    background-color: #e50914;
+    background-color: #c4dea4;
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -87,16 +97,12 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #ff3d3d;
+    background-color: #a7d489;
 }
 
 li a {
     text-decoration: none;
-    color: #e50914;
+    color: #c4dea4;
     font-weight: bold;
-}
-
-li a:hover {
-    text-decoration: underline;
 }
 
