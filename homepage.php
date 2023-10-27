@@ -1,21 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Homepage</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-    <div class="top-bar">
-        <div class="container">
-            <a href="homepage.php">Voting Website</a>
-            <a href="signup.php" class="top-bar-button">Sign Up</a>
-            <a href="login.php" class="top-bar-button">Login</a>
-        </div>
-    </div>
-    <div class="container">
-        <!-- Your homepage content goes here -->
-        <h1>Welcome to our website</h1>
-        <p>This is the homepage content.</p>
-    </div>
-</body>
-</html>
+<?php
+// Database connection setup
+$servername = "localhost";
+$username = "root"; // Replace with your MySQL username
+$password = ""; // Replace with your MySQL password
+$database = "szavazatszamlalo";
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+echo "Connected successfully";
+
+// Now you have a successful database connection
+// You can perform queries and operations here
+
+// Don't forget to close the connection when you're done
+$conn->close();
+?>
