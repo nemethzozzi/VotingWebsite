@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `felhasznalo` (
   `Felhasznalonev` varchar(10) NOT NULL,
   `Email` varchar(30) NOT NULL,
-  `Jelszo` varchar(20) NOT NULL,
+  `Jelszo` varchar(60) NOT NULL,
   `Legutobbi belepes` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 

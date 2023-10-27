@@ -1,6 +1,6 @@
 <?php
 $servername = "localhost";
-$username = "root"; // Replace with your MySQL username
+$username = "root";
 $password = ""; // Replace with your MySQL password
 $database = "szavazatszamlalo";
 
@@ -16,34 +16,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM felhasznalo WHERE Email = ?";
-    
+    $sql = "SELECT Jelszo FROM felhasznalo WHERE Email = ?";
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $email);
         if ($stmt->execute()) {
-            $result = $stmt->get_result();
-            if ($result->num_rows == 1) {
-                $row = $result->fetch_assoc();
-                $hashed_password = $row['Jelszo'];
-                
-                if (password_verify($password, $hashed_password)) {
-                    echo "Login successful!";
-                    // You can redirect the user to a dashboard or another page here.
-                } else {
-                    echo "Invalid password. Please try again.";
-                }
+            $stmt->bind_result($hashed_password);
+            $stmt->fetch();
+
+            if (password_verify($password, $hashed_password)) {
+                // Login successful, redirect to homepage.php
+                header("Location: homepage.php");
+                exit; // Ensure no further processing of the script
             } else {
-                echo "Email not found. Please register first.";
+                echo "Login failed. Please check your credentials.";
             }
         } else {
-            echo "Login failed. Please try again later.";
+            echo "Error executing the query: " . $stmt->error;
         }
         $stmt->close();
     } else {
-        echo "Error in preparing the SQL statement.";
+        echo "Error in preparing the SQL statement: " . $conn->error;
     }
-} 
+}
+
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
