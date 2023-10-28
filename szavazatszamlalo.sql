@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2023. Okt 27. 17:08
+-- Létrehozás ideje: 2023. Okt 28. 20:16
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -46,7 +46,7 @@ CREATE TABLE `jelolt` (
   `Szuletesi datum` date NOT NULL,
   `Foglalkozas` varchar(10) NOT NULL,
   `Program` varchar(10) NOT NULL,
-  `Szavazas kod` int(10) DEFAULT NULL,
+  `Szavazas kod` int(6) DEFAULT NULL,
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
@@ -58,11 +58,11 @@ CREATE TABLE `jelolt` (
 
 CREATE TABLE `szavazas` (
   `Megnevezes` varchar(10) NOT NULL,
-  `Leiras` varchar(6) NOT NULL,
-  `Jeloltek` varchar(6) NOT NULL,
+  `Leiras` varchar(100) NOT NULL,
+  `Jeloltek` varchar(20) NOT NULL,
   `Indul` date NOT NULL,
   `Zarul` date NOT NULL,
-  `Szavazas kod` int(11) NOT NULL,
+  `Szavazas kod` int(6) NOT NULL,
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
@@ -74,11 +74,11 @@ CREATE TABLE `szavazas` (
 
 CREATE TABLE `szavazat` (
   `Felhasznalonev` varchar(10) NOT NULL,
-  `Melyik szavazas` varchar(6) NOT NULL,
-  `Melyik jeloltre` varchar(6) NOT NULL,
+  `Melyik szavazas` varchar(10) NOT NULL,
+  `Melyik jeloltre` varchar(20) NOT NULL,
   `Idopont` date NOT NULL,
   `Szavazat kod` int(6) NOT NULL,
-  `Szavazas kod` int(11) DEFAULT NULL,
+  `Szavazas kod` int(6) DEFAULT NULL,
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
@@ -107,6 +107,7 @@ ALTER TABLE `jelolt`
 --
 ALTER TABLE `szavazas`
   ADD PRIMARY KEY (`Szavazas kod`),
+  ADD UNIQUE KEY `Szavazas kod_2` (`Szavazas kod`),
   ADD UNIQUE KEY `Szavazas kod` (`Szavazas kod`,`Email`),
   ADD KEY `Email` (`Email`);
 
@@ -120,6 +121,28 @@ ALTER TABLE `szavazat`
   ADD KEY `Szavazas kod` (`Szavazas kod`);
 
 --
+-- A kiírt táblák AUTO_INCREMENT értéke
+--
+
+--
+-- AUTO_INCREMENT a táblához `jelolt`
+--
+ALTER TABLE `jelolt`
+  MODIFY `Jelolt kod` int(6) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `szavazas`
+--
+ALTER TABLE `szavazas`
+  MODIFY `Szavazas kod` int(6) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `szavazat`
+--
+ALTER TABLE `szavazat`
+  MODIFY `Szavazat kod` int(6) NOT NULL AUTO_INCREMENT;
+
+--
 -- Megkötések a kiírt táblákhoz
 --
 
@@ -127,8 +150,8 @@ ALTER TABLE `szavazat`
 -- Megkötések a táblához `jelolt`
 --
 ALTER TABLE `jelolt`
-  ADD CONSTRAINT `jelolt_ibfk_1` FOREIGN KEY (`Email`) REFERENCES `felhasznalo` (`Email`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `jelolt_ibfk_2` FOREIGN KEY (`Szavazas kod`) REFERENCES `szavazas` (`Szavazas kod`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `jelolt_ibfk_2` FOREIGN KEY (`Email`) REFERENCES `felhasznalo` (`Email`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `jelolt_ibfk_3` FOREIGN KEY (`Szavazas kod`) REFERENCES `szavazas` (`Szavazas kod`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `szavazas`

@@ -1,9 +1,9 @@
 <?php
-session_start(); // Start the session
+session_start(); // Start the sessios
 
 $servername = "localhost";
 $username = "root";
-$password = ""; // Replace with your MySQL password
+$password = "";
 $database = "szavazatszamlalo";
 
 // Create a database connection
