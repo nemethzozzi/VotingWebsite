@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root"; // Replace with your MySQL username
-$password = ""; // Replace with your MySQL password
+$username = "root"; 
+$password = ""; 
 $database = "szavazatszamlalo";
 
 // Create a database connection
@@ -29,9 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("sss", $email, $username, $hashed_password);
         if ($stmt->execute()) {
-            echo "Registration successful!";
+            echo "Sign Up successful!";
         } else {
-            echo "Registration failed. Please try again later.";
+            echo "Sign Up failed. Please try again later.";
         }
         $stmt->close();
     } else {
@@ -43,11 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration</title>
+    <title>Sign Up</title>
 </head>
 <body>
-    <h2>Registration Form</h2>
-    <form method="post" action="signup.php"> <!-- Change the action to the current file's name -->
+    <h2>Sign Up Form</h2>
+    <form method="post" action="signup.php"> 
         <label for="email">Email:</label>
         <input type="email" name="email" required><br><br>
 
@@ -62,5 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <input type="submit" value="Register">
     </form>
+
+    <p>Already have an account? <a href="login.php">Login Now!</a></p>
+</body>
 </body>
 </html>

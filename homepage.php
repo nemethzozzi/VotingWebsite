@@ -1,8 +1,8 @@
 <?php
 // Database connection setup
 $servername = "localhost";
-$username = "root"; // Replace with your MySQL username
-$password = ""; // Replace with your MySQL password
+$username = "root";
+$password = "";
 $database = "szavazatszamlalo";
 
 // Create a connection
@@ -12,11 +12,27 @@ $conn = new mysqli($servername, $username, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-echo "Connected successfully";
 
-// Now you have a successful database connection
-// You can perform queries and operations here
-
-// Don't forget to close the connection when you're done
-$conn->close();
+// Start the session (if not already started)
+session_start();
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voting Website</title>
+</head>
+<body>
+    <?php
+    // Check if the user is logged in or not
+    if (isset($_SESSION['email'])) {
+        // User is logged in, display a link to logout.php
+        echo '<li><a href="logout.php">Logout</a></li>';
+    } else {
+        // User is not logged in, display links to login.php and signup.php
+        echo '<li><a href="login.php">Login</a></li>';
+        echo '<li><a href="signup.php">Signup</a></li>';
+    }
+    ?>
+</body>
+</html>
