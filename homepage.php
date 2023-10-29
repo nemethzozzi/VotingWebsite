@@ -81,6 +81,7 @@ session_start();
                     if ($canExtendDate) {
                         echo '<a href="extend_date.php?vote_id=' . $row['Szavazas kod'] . '">Extend Date</a>';
                         echo '<a href="delete_participant.php?vote_id=' . $row['Szavazas kod'] . '">Delete Participant</a>';
+                        echo '<a href="update_vote.php?vote_id=' . $row['Szavazas kod'] . '">Update Participant Data</a>';
                     }
                 }
             }
