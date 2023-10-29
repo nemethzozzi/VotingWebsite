@@ -73,6 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 
     <p>Don't have account? <a href="signup.php">Signup Now!</a></p>
+    <p><a href="homepage.php">Go back to homepage</a></p>
+
 </body>
 </body>
 </html>

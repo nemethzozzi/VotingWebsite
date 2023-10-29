@@ -50,12 +50,11 @@ session_start();
                     echo '<h3>Voting Results:</h3>';
                     // Fetch and display voting results here
                 }
-                
+
                 // Add new participant form
                 echo '<h3>Add New Participant:</h3>';
                 echo '<form action="add_participant.php" method="post">';
                 echo '<input type="hidden" name="vote_id" value="' . $row['Szavazas kod'] . '">';
-                echo 'Participant Name: <input type="text" name="participant_name" required>';
                 echo '<input type="submit" value="Add Participant">';
                 echo '</form>';
             }

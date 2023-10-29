@@ -1,56 +1,67 @@
 <?php
-// Database connection setup
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "szavazatszamlalo";
-
-// Create a connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Start the session (if not already started)
 session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
-    // Redirect to login page if the user is not logged in
-    header("Location: login.php");
+    header('Location: login.php');
     exit;
 }
 
-// Check if the vote_id and participant_name are provided in the POST request
-if (isset($_POST['vote_id']) && isset($_POST['participant_name'])) {
-    $voteId = $_POST['vote_id'];
-    $participantName = $_POST['participant_name'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $birthdate = $_POST['birthdate'];
+    $occupation = $_POST['occupation'];
+    $program = $_POST['program'];
 
-    // Perform input validation and sanitation here if necessary
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "szavazatszamlalo";
 
-    // Insert the new participant into the 'jelolt' table
-    $insertParticipantSQL = "INSERT INTO jelolt (`Nev`, `Szavazas kod`, `Email`) VALUES (?, ?, ?)";
-    $insertParticipantStmt = $conn->prepare($insertParticipantSQL);
-    if ($insertParticipantStmt) {
-        $insertParticipantStmt->bind_param("sis", $participantName, $voteId, $_SESSION['email']);
-        if ($insertParticipantStmt->execute()) {
-            // Participant added successfully
-            header("Location: homepage.php"); // Redirect to the homepage
-        } else {
-            // Error occurred while adding the participant
-            echo "Error: Unable to add the participant.";
-        }
-        $insertParticipantStmt->close();
-    } else {
-        echo "Error: Unable to prepare the SQL statement.";
+    // Create a database connection
+    $conn = new mysqli($servername, $username, $password, $database);
+
+    // Check for connection errors
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
-} else {
-    // Redirect to the homepage if vote_id or participant_name is not provided
-    header("Location: homepage.php");
-}
 
-// Close the database connection
-$conn->close();
+    // Prepare and execute SQL statement to insert a new participant
+    $sql = "INSERT INTO jelolt (`Nev`, `Szuletesi datum`, `Foglalkozas`, `Program`, `Email`) VALUES (?, ?, ?, ?, ?)";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("sssss", $name, $birthdate, $occupation, $program, $_SESSION['email']);
+        if ($stmt->execute()) {
+            echo "New participant added successfully!";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        echo "Error in preparing the SQL statement: " . $conn->error;
+    }
+
+    $conn->close();
+}
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Participant</title>
+</head>
+<body>
+
+<h2>Add Participant</h2>
+
+<form method="post" action="add_participant.php">
+    Name: <input type="text" name="name" required><br><br>
+    Birthdate: <input type="date" name="birthdate" required><br><br>
+    Occupation: <input type="text" name="occupation" required><br><br>
+    Program: <input type="text" name="program" required><br><br>
+    <input type="submit" value="Add Participant">
+</form>
+
+<p><a href="homepage.php">Go back to homepage</a></p>
+
+</body>
+</html>
