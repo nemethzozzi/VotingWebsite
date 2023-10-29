@@ -1,11 +1,9 @@
 <?php
-// Database connection setup
+// Database connection setup (same as in your existing code)
 $servername = "localhost";
 $username = "root";
 $password = "";
 $database = "szavazatszamlalo";
-
-// Create a connection
 $conn = new mysqli($servername, $username, $password, $database);
 
 // Check the connection
@@ -31,6 +29,12 @@ session_start();
         echo '<li><a href="logout.php">Logout</a></li>';
         echo '<a href="create_vote.php">Create a New Vote</a><br>';
 
+        // Check if a new participant has been added
+        if (isset($_SESSION['participant_added']) && $_SESSION['participant_added']) {
+            echo '<p>A new participant has been added!</p>';
+            unset($_SESSION['participant_added']); // Unset the session variable
+        }
+
         // Display a list of available votes
         $query = "SELECT * FROM szavazas";
         $result = $conn->query($query);
@@ -43,7 +47,7 @@ session_start();
                 echo '<p>Jeloltek: ' . $row['Jeloltek'] . '</p>';
                 echo '<p>Indul: ' . $row['Indul'] . '</p>';
                 echo '<p>Zarul: ' . $row['Zarul'] . '</p>';
-                
+
                 // Display voting results if the vote is closed
                 $currentDate = date('Y-m-d');
                 if ($currentDate > $row['Zarul']) {
@@ -72,10 +76,10 @@ session_start();
                     echo '</select>';
                     echo '<input type="submit" value="Vote">';
                     echo '</form>';
-                    
+
                     // Link to "add_new_participant.php" with the vote ID
                     echo '<a href="add_new_participant.php?vote_id=' . $row['Szavazas kod'] . '">Add New Participant</a>';
-                    
+
                     // Check if the user can extend the "Zarul" date
                     $canExtendDate = true; // Implement permission check
                     if ($canExtendDate) {
@@ -92,11 +96,11 @@ session_start();
         // User is not logged in, display links to login.php and signup.php
         echo '<li><a href="login.php">Login</a></li>';
         echo '<li><a href="signup.php">Signup</a></li>';
-        
+
         // Display a list of available votes for non-logged users
         $query = "SELECT * FROM szavazas";
         $result = $conn->query($query);
-        
+
         if ($result->num_rows > 0) {
             echo '<h2>Available Votes:</h2>';
             while ($row = $result->fetch_assoc()) {
@@ -105,7 +109,7 @@ session_start();
                 echo '<p>Jeloltek: ' . $row['Jeloltek'] . '</p>';
                 echo '<p>Indul: ' . $row['Indul'] . '</p>';
                 echo '<p>Zarul: ' . $row['Zarul'] . '</p>';
-                
+
                 // Display voting results if the vote is closed
                 $currentDate = date('Y-m-d');
                 if ($currentDate > $row['Zarul']) {
