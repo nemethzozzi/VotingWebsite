@@ -39,11 +39,11 @@ session_start();
             echo '<h2>Available Votes:</h2>';
             while ($row = $result->fetch_assoc()) {
                 echo '<h3>' . $row['Megnevezes'] . '</h3>';
-                echo '<p>' . $row['Leiras'] . '</p';
+                echo '<p>' . $row['Leiras'] . '</p>';
                 echo '<p>Jeloltek: ' . $row['Jeloltek'] . '</p>';
                 echo '<p>Indul: ' . $row['Indul'] . '</p>';
                 echo '<p>Zarul: ' . $row['Zarul'] . '</p>';
-
+                
                 // Display voting results if the vote is closed
                 $currentDate = date('Y-m-d');
                 if ($currentDate > $row['Zarul']) {
@@ -55,14 +55,33 @@ session_start();
                     echo '<form action="add_vote.php" method="post">';
                     echo '<input type="hidden" name="vote_id" value="' . $row['Szavazas kod'] . '">';
                     echo '<select name="selected_participant">';
-                    // Create options for participants here
-                    $participants = explode(',', $row['Jeloltek']);
-                    foreach ($participants as $participant) {
-                        echo '<option value="' . $participant . '">' . $participant . '</option>';
+
+                    // Fetch participants for this specific vote
+                    $addParticipantQuery = "SELECT `Nev` FROM jelolt WHERE `Szavazas kod` = ?";
+                    if ($stmt = $conn->prepare($addParticipantQuery)) {
+                        $stmt->bind_param("i", $row['Szavazas kod']);
+                        $stmt->execute();
+                        $participantsResult = $stmt->get_result();
+                        $stmt->close();
                     }
+
+                    while ($participantRow = $participantsResult->fetch_assoc()) {
+                        echo '<option value="' . $participantRow['Nev'] . '">' . $participantRow['Nev'] . '</option>';
+                    }
+
                     echo '</select>';
                     echo '<input type="submit" value="Vote">';
                     echo '</form>';
+                    
+                    // Link to "add_new_participant.php" with the vote ID
+                    echo '<a href="add_new_participant.php?vote_id=' . $row['Szavazas kod'] . '">Add New Participant</a>';
+                    
+                    // Check if the user can extend the "Zarul" date
+                    $canExtendDate = true; // Implement permission check
+                    if ($canExtendDate) {
+                        echo '<a href="extend_date.php?vote_id=' . $row['Szavazas kod'] . '">Extend Date</a>';
+                        echo '<a href="delete_participant.php?vote_id=' . $row['Szavazas kod'] . '">Delete Participant</a>';
+                    }
                 }
             }
         } else {
@@ -84,7 +103,7 @@ session_start();
                 echo '<p>' . $row['Leiras'] . '</p>';
                 echo '<p>Jeloltek: ' . $row['Jeloltek'] . '</p>';
                 echo '<p>Indul: ' . $row['Indul'] . '</p>';
-                echo '<p>Zarul: ' . $row['Zarul'] . '</p';
+                echo '<p>Zarul: ' . $row['Zarul'] . '</p>';
                 
                 // Display voting results if the vote is closed
                 $currentDate = date('Y-m-d');

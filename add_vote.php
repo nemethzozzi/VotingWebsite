@@ -40,6 +40,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (in_array($selected_participant, $participants)) {
                 // Check if the user has already voted for this vote
                 $user_email = $_SESSION['email'];
+                
+                // Fetch the username based on the user's email
+                $fetchUsernameSql = "SELECT Felhasznalonev FROM felhasznalo WHERE Email = ?";
+                if ($stmt = $conn->prepare($fetchUsernameSql)) {
+                    $stmt->bind_param("s", $user_email);
+                    $stmt->execute();
+                    $stmt->bind_result($user_username);
+                    $stmt->fetch();
+                    $stmt->close();
+                }
+                
+                // Check if the user has already voted for this vote
                 $checkUserVoteSql = "SELECT * FROM szavazat WHERE `Melyik szavazas` = ? AND `Email` = ?";
                 if ($stmt = $conn->prepare($checkUserVoteSql)) {
                     $stmt->bind_param("si", $vote_id, $user_email);
@@ -48,10 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($result->num_rows > 0) {
                         echo "You have already voted for this vote.";
                     } else {
-                        // Insert the vote into the database
-                        $insertVoteSql = "INSERT INTO szavazat (`Melyik szavazas`, `Melyik jeloltre`, `Email`, `Idopont`) VALUES (?, ?, ?, CURRENT_DATE)";
+                        // Insert the vote into the database with the 'Felhasznalonev' field
+                        $insertVoteSql = "INSERT INTO szavazat (`Melyik szavazas`, `Melyik jeloltre`, `Email`, `Felhasznalonev`, `Idopont`) VALUES (?, ?, ?, ?, CURRENT_DATE)";
                         if ($stmt = $conn->prepare($insertVoteSql)) {
-                            $stmt->bind_param("iss", $vote_id, $selected_participant, $user_email);
+                            $stmt->bind_param("isss", $vote_id, $selected_participant, $user_email, $user_username);
                             if ($stmt->execute()) {
                                 echo "Your vote has been recorded.";
                             } else {
