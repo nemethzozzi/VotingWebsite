@@ -20,6 +20,9 @@ if (!isset($_SESSION['email'])) {
     exit;
 }
 
+// Get the user's email from the session
+$userEmail = $_SESSION['email'];
+
 // Check if the vote ID is provided in the URL
 if (isset($_GET['vote_id'])) {
     $voteID = $_GET['vote_id'];
@@ -28,6 +31,7 @@ if (isset($_GET['vote_id'])) {
     exit;
 }
 
+// ...
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the new participant's data from the form
     $newParticipantName = $_POST['new_participant_name'];
@@ -35,10 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $occupation = $_POST['occupation'];
     $program = $_POST['program'];
 
+    // Get the user's email from the session
+    $userEmail = $_SESSION['email'];
+
     // Insert the new participant into the database, associating them with the specific vote
-    $insertQuery = "INSERT INTO jelolt (`Nev`, `Szavazas kod`, `Szuletesi datum`, `Foglalkozas`, `Program`) VALUES (?, ?, ?, ?, ?)";
+    $insertQuery = "INSERT INTO jelolt (`Nev`, `Szavazas kod`, `Szuletesi datum`, `Foglalkozas`, `Program`, `Email`) VALUES (?, ?, ?, ?, ?, ?)";
     if ($stmt = $conn->prepare($insertQuery)) {
-        $stmt->bind_param("sisss", $newParticipantName, $voteID, $birthdate, $occupation, $program);
+        $stmt->bind_param("sissss", $newParticipantName, $voteID, $birthdate, $occupation, $program, $userEmail);
         if ($stmt->execute()) {
             echo "New participant added successfully.";
         } else {
@@ -47,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 }
+// ...
 
 ?>
 

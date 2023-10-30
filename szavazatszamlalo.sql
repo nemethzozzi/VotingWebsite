@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2023. Okt 28. 20:16
+-- Létrehozás ideje: 2023. Okt 30. 15:53
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -28,11 +28,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `felhasznalo` (
-  `Felhasznalonev` varchar(10) NOT NULL,
+  `Felhasznalonev` varchar(20) NOT NULL,
   `Email` varchar(30) NOT NULL,
   `Jelszo` varchar(60) NOT NULL,
   `Legutobbi belepes` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `felhasznalo`
+--
+
+INSERT INTO `felhasznalo` (`Felhasznalonev`, `Email`, `Jelszo`, `Legutobbi belepes`) VALUES
+('asd', 'asd@mail.com', '$2y$10$0VoFppYuCKJ9LLjJpOWPgOzgtk5a89yttLNxIrSvLQOje4oJ/MJdq', '2023-10-30');
 
 -- --------------------------------------------------------
 
@@ -42,13 +49,24 @@ CREATE TABLE `felhasznalo` (
 
 CREATE TABLE `jelolt` (
   `Jelolt kod` int(6) NOT NULL,
-  `Nev` varchar(10) NOT NULL,
+  `Nev` varchar(50) NOT NULL,
   `Szuletesi datum` date NOT NULL,
-  `Foglalkozas` varchar(10) NOT NULL,
-  `Program` varchar(10) NOT NULL,
+  `Foglalkozas` varchar(100) NOT NULL,
+  `Program` varchar(100) NOT NULL,
   `Szavazas kod` int(6) DEFAULT NULL,
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `jelolt`
+--
+
+INSERT INTO `jelolt` (`Jelolt kod`, `Nev`, `Szuletesi datum`, `Foglalkozas`, `Program`, `Szavazas kod`, `Email`) VALUES
+(1, 'Proba', '2000-10-10', 'asdasd', 'asdasd', NULL, 'asd@mail.com'),
+(2, 'Proba2', '2000-10-10', 'asdasd', 'asdasd', NULL, 'asd@mail.com'),
+(3, 'Proba3', '2000-10-10', 'asdasd', 'asdasd', 11, 'asd@mail.com'),
+(4, 'Proba4', '2000-10-10', 'asdasd', 'asdasd', 11, 'asd@mail.com'),
+(5, 'végre műkö', '2000-10-10', 'asdasd', 'asdas', 11, 'asd@mail.com');
 
 -- --------------------------------------------------------
 
@@ -57,7 +75,7 @@ CREATE TABLE `jelolt` (
 --
 
 CREATE TABLE `szavazas` (
-  `Megnevezes` varchar(10) NOT NULL,
+  `Megnevezes` varchar(20) NOT NULL,
   `Leiras` varchar(100) NOT NULL,
   `Jeloltek` varchar(20) NOT NULL,
   `Indul` date NOT NULL,
@@ -66,6 +84,13 @@ CREATE TABLE `szavazas` (
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
+--
+-- A tábla adatainak kiíratása `szavazas`
+--
+
+INSERT INTO `szavazas` (`Megnevezes`, `Leiras`, `Jeloltek`, `Indul`, `Zarul`, `Szavazas kod`, `Email`) VALUES
+('Proba', 'asdasd', 'Proba', '2023-10-30', '2030-10-10', 11, 'asd@mail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -73,14 +98,21 @@ CREATE TABLE `szavazas` (
 --
 
 CREATE TABLE `szavazat` (
-  `Felhasznalonev` varchar(10) NOT NULL,
-  `Melyik szavazas` varchar(10) NOT NULL,
-  `Melyik jeloltre` varchar(20) NOT NULL,
+  `Felhasznalonev` varchar(30) NOT NULL,
+  `Melyik szavazas` varchar(20) NOT NULL,
+  `Melyik jeloltre` varchar(50) NOT NULL,
   `Idopont` date NOT NULL,
   `Szavazat kod` int(6) NOT NULL,
   `Szavazas kod` int(6) DEFAULT NULL,
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `szavazat`
+--
+
+INSERT INTO `szavazat` (`Felhasznalonev`, `Melyik szavazas`, `Melyik jeloltre`, `Idopont`, `Szavazat kod`, `Szavazas kod`, `Email`) VALUES
+('asd', '11', 'Proba', '2023-10-30', 6, NULL, 'asd@mail.com');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -128,19 +160,19 @@ ALTER TABLE `szavazat`
 -- AUTO_INCREMENT a táblához `jelolt`
 --
 ALTER TABLE `jelolt`
-  MODIFY `Jelolt kod` int(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `Jelolt kod` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT a táblához `szavazas`
 --
 ALTER TABLE `szavazas`
-  MODIFY `Szavazas kod` int(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `Szavazas kod` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT a táblához `szavazat`
 --
 ALTER TABLE `szavazat`
-  MODIFY `Szavazat kod` int(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `Szavazat kod` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Megkötések a kiírt táblákhoz
