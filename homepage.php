@@ -75,18 +75,12 @@ session_start();
                     echo '<input type="submit" value="Vote">';
                     echo '</form>';
 
-
-                    // Link to "add_new_participant.php" with the vote ID
                     echo '<a href="add_new_participant.php?vote_id=' . $row['Szavazas kod'] . '">Add New Participant</a>';
-
-                    // Check if the user can extend the "Zarul" date
-                    $canExtendDate = true; // Implement permission check
-                    if ($canExtendDate) {
-                        echo '<a href="extend_date.php?vote_id=' . $row['Szavazas kod'] . '">Extend Date</a>';
-                        echo '<a href="delete_participant.php?vote_id=' . $row['Szavazas kod'] . '">Delete Participant</a>';
-                        echo '<a href="update_vote.php?vote_id=' . $row['Szavazas kod'] . '">Update Participant Data</a>';
-                        echo '<a href="withdraw_participant.php?vote_id=' . $row['Szavazas kod'] . '">Withdraw Participant</a>';  
-                    }
+                    echo '<a href="extend_date.php?vote_id=' . $row['Szavazas kod'] . '">Extend Date</a>';
+                    echo '<a href="delete_participant.php?vote_id=' . $row['Szavazas kod'] . '">Delete Participant</a>';
+                    echo '<a href="update_participant.php?vote_id=' . $row['Szavazas kod'] . '">Update Participant Data</a>';
+                    echo '<a href="withdraw_participant.php?vote_id=' . $row['Szavazas kod'] . '">Withdraw Participant</a>';  
+                    
                 }
             }
         } else {
