@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the sessios
+session_start(); // Start the session
 
 $servername = "localhost";
 $username = "root";
@@ -40,7 +40,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $updateStmt->close();
                 }
 
-                header("Location: homepage.php");
+                echo "Logged in successfully.";
+                echo '<script>
+                    setTimeout(function() {
+                        window.location.href = "homepage.php";
+                    }, 2000);
+                </script>';
                 exit; // Ensure no further processing of the script
             } else {
                 echo "Login failed. Please check your credentials.";
@@ -54,10 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Login</title>
 </head>
 <body>
@@ -72,9 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" value="Login">
     </form>
 
-    <p>Don't have account? <a href="signup.php">Signup Now!</a></p>
+    <p>Don't have an account? <a href="signup.php">Signup Now!</a></p>
     <p><a href="homepage.php">Go back to homepage</a></p>
 
-</body>
 </body>
 </html>

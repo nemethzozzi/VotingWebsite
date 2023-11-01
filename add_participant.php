@@ -41,12 +41,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn->close();
+    echo '<script type="text/javascript">
+    setTimeout(function() {
+        window.location = "create_vote.php";
+    }, 1500);
+</script>';
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Add Participant</title>
 </head>
 <body>

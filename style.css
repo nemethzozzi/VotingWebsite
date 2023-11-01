@@ -1,0 +1,207 @@
+/* style.css */
+
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logout-link, .login-link, .signup-link {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.logout-link {
+    margin-left: auto;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
+/* Form styles */
+form {
+    width: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #3498db;
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background: #2980b9;
+}
+
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Additional styles for homepage.php content */
+li {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+a[href] {
+    display: block;
+    margin: 5px 0;
+    text-align: center;
+    color: #3498db;
+    text-decoration: none;
+}
+
+a[href]:hover {
+    text-decoration: underline;
+}
+
+h3 {
+    color: #333;
+    margin: 15px 0 10px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+/* Styles for Voting Section */
+.greeting {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.votes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.vote {
+    width: 300px;
+    margin: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.vote-title {
+    color: #333;
+    margin: 15px 0 10px;
+}
+
+.vote-description {
+    margin-bottom: 10px;
+}
+
+.vote-start, .vote-end {
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    color: #333;
+    margin: 15px 0 10px;
+}
+
+.vote-form {
+    width: 100%;
+    text-align: center;
+}
+
+.participant-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+.primary-button {
+    background: #3498db;
+    color: #fff;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background: #2980b9;
+}
+
+/* Add your additional styling here as needed */

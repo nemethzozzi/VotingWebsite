@@ -15,6 +15,8 @@ if ($conn->connect_error) {
 
 session_start();
 
+$updateSuccess = false; // Variable to track the update success
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['vote_id']) && isset($_POST['selected_participant']) && isset($_POST['name']) && isset($_POST['birthdate']) && isset($_POST['occupation']) && isset($_POST['program'])) {
         $vote_id = $_POST['vote_id'];
@@ -28,14 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateParticipantQuery = "UPDATE jelolt SET `Nev` = ?, `Szuletesi datum` = ?, `Foglalkozas` = ?, `Program` = ? WHERE `Szavazas kod` = ? AND `Nev` = ?";
         if ($stmt = $conn->prepare($updateParticipantQuery)) {
             $stmt->bind_param("ssssis", $name, $birthdate, $occupation, $program, $vote_id, $selected_participant);
-            $stmt->execute();
+            if ($stmt->execute()) {
+                $updateSuccess = true; // Update was successful
+            }
             $stmt->close();
-
-            // Redirect back to the homepage or any other appropriate page
-            header("Location: homepage.php");
-            exit();
-        } else {
-            echo "Error updating participant data for the vote.";
         }
     }
 }
@@ -55,8 +53,6 @@ if (isset($_GET['vote_id'])) {
         while ($participantRow = $participantsResult->fetch_assoc()) {
             $participants[] = $participantRow['Nev'];
         }
-    } else {
-        echo "Error retrieving participants for the vote.";
     }
 }
 ?>
@@ -64,10 +60,21 @@ if (isset($_GET['vote_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Update Participant Data</title>
 </head>
 <body>
     <h2>Update Participant Data for Vote</h2>
+    <?php
+    if ($updateSuccess) {
+        echo '<p style="color: green;">Participant data updated successfully.</p>';
+        echo '<script>
+            setTimeout(function(){
+                window.location.href = "homepage.php";
+            }, 3000);
+        </script>';
+    }
+    ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <input type="hidden" name="vote_id" value="<?php echo $vote_id; ?>">
         <label for="selected_participant">Select Participant:</label>

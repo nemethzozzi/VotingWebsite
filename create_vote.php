@@ -56,8 +56,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Execute the insert query
         if ($stmt->execute()) {
-            // Vote created successfully
-            echo "Vote created successfully!";
+            // Get the auto-generated vote number
+            $voteNumber = $stmt->insert_id;
+
+            // Update the 'Szavazas kod' for the participants in the 'jelolt' table
+            $updateParticipantsSql = "UPDATE jelolt SET `Szavazas kod` = ? WHERE `Nev` = ?";
+            if ($updateStmt = $conn->prepare($updateParticipantsSql)) {
+                $updateStmt->bind_param("is", $voteNumber, $jeloltek);
+                if ($updateStmt->execute()) {
+                    // Participants' vote numbers updated successfully
+                    echo "Vote created successfully!";
+                } else {
+                    // Error while updating participants
+                    echo "Error updating participant vote numbers: " . $updateStmt->error;
+                }
+                $updateStmt->close();
+            } else {
+                // Error in preparing the update statement
+                echo "Error preparing the update statement: " . $conn->error;
+            }
         } else {
             // Error while executing the query
             echo "Error creating vote: " . $stmt->error;
@@ -68,13 +85,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error preparing the SQL statement: " . $conn->error;
     }
 }
+
 // Close the database connection
 $conn->close();
+echo '<script type="text/javascript">
+setTimeout(function() {
+    window.location = "homepage.php";
+}, 3000);
+</script>';
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Create Vote</title>
 </head>
 <body>

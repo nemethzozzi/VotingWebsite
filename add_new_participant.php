@@ -52,15 +52,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error adding new participant: " . $stmt->error;
         }
         $stmt->close();
+        echo '<script type="text/javascript">
+        setTimeout(function() {
+            window.location = "homepage.php";
+        }, 3000);
+        </script>';
     }
 }
-// ...
 
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Add New Participant</title>
 </head>
 <body>

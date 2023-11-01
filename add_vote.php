@@ -111,4 +111,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Close the database connection
 $conn->close();
+echo '<script type="text/javascript">
+setTimeout(function() {
+    window.location = "homepage.php";
+}, 3000);
+</script>';
 ?>

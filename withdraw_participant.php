@@ -60,6 +60,7 @@ if (isset($_GET['vote_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Withdraw Participant</title>
 </head>
 <body>

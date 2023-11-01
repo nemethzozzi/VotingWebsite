@@ -45,6 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Error deleting participant: " . $stmt->error;
         }
         $stmt->close();
+        echo '<script type="text/javascript">
+        setTimeout(function() {
+            window.location = "homepage.php";
+        }, 3000);
+        </script>';
     }
 }
 ?>
@@ -52,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Delete Participant</title>
 </head>
 <body>

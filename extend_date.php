@@ -39,6 +39,13 @@ if (isset($_SESSION['email'])) {
                 }
                 $stmt->close();
             }
+
+            // Redirect to homepage.php after displaying the message for 3 seconds
+            echo '<script>
+                setTimeout(function(){
+                    window.location.href = "homepage.php";
+                }, 3000);
+            </script>';
         }
     } else {
         echo "You do not have permission to extend the date.";
@@ -51,6 +58,7 @@ if (isset($_SESSION['email'])) {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Extend Zarul Date</title>
 </head>
 <body>
@@ -63,6 +71,6 @@ if (isset($_SESSION['email'])) {
         echo '</form>';
     }
     ?>
-        <p><a href="homepage.php">Go back to homepage</a></p>
+    <p><a href="homepage.php">Go back to homepage</a></p>
 </body>
 </html>

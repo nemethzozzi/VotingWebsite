@@ -20,6 +20,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Voting Website</title>
 </head>
 <body>
@@ -28,7 +29,7 @@ session_start();
     if (isset($_SESSION['email'])) {
         // User is logged in, display a link to logout.php
         echo '<p>Hello ' . $_SESSION['username'] . '</p>';
-        echo '<li><a href="logout.php">Logout</a></li>';
+        echo '<a href="logout.php">Logout</a><br>';
         echo '<a href="create_vote.php">Create a New Vote</a><br>';
 
         // Display a list of available votes
@@ -39,8 +40,7 @@ session_start();
             echo '<h2>Available Votes:</h2>';
             while ($row = $result->fetch_assoc()) {
                 echo '<h3>' . $row['Megnevezes'] . '</h3>';
-                echo '<p>' . $row['Leiras'] . '</p';
-                echo '<p>Jeloltek: ' . $row['Jeloltek'] . '</p>';
+                echo '<p>' . $row['Leiras'] . '</p<br>';
                 echo '<p>Indul: ' . $row['Indul'] . '</p>';
                 echo '<p>Zarul: ' . $row['Zarul'] . '</p>';
 
@@ -99,8 +99,7 @@ session_start();
             echo '<h2>Available Votes:</h2>';
             while ($row = $result->fetch_assoc()) {
                 echo '<h3>' . $row['Megnevezes'] . '</h3>';
-                echo '<p>' . $row['Leiras'] . '</p>';
-                echo '<p>Jeloltek: ' . $row['Jeloltek'] . '</p>';
+                echo '<p>' . $row['Leiras'] . '</p><br>';
                 echo '<p>Indul: ' . $row['Indul'] . '</p>';
                 echo '<p>Zarul: ' . $row['Zarul'] . '</p';
                 
