@@ -100,5 +100,6 @@ if (isset($_GET['vote_id'])) {
 
         <input type="submit" value="Update Participant Data">
     </form>
+    <p><a href="homepage.php">Go back to homepage</a></p>
 </body>
 </html>

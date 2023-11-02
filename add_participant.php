@@ -56,18 +56,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Add Participant</title>
 </head>
 <body>
+    <h2>Add Participant</h2>
 
-<h2>Add Participant</h2>
+    <form method="post" action="add_participant.php">
+        Name: <input type="text" name="name" required><br><br>
+        Birthdate: <input type="date" name="birthdate" required><br><br>
+        Occupation: <input type="text" name="occupation" required><br><br>
+        Program: <input type="text" name="program" required><br><br>
+        <input type="submit" value="Add Participant">
+    </form>
 
-<form method="post" action="add_participant.php">
-    Name: <input type="text" name="name" required><br><br>
-    Birthdate: <input type="date" name="birthdate" required><br><br>
-    Occupation: <input type="text" name="occupation" required><br><br>
-    Program: <input type="text" name="program" required><br><br>
-    <input type="submit" value="Add Participant">
-</form>
+    <p><a href="homepage.php">Go back to homepage</a></p>
 
-<p><a href="homepage.php">Go back to homepage</a></p>
-
-</body>
+    </body>
 </html>

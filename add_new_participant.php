@@ -77,6 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Program: <input type="text" name="program" required><br><br>
         <input type="submit" value="Add Participant">
     </form>
-    <a href="homepage.php">Back to Homepage</a>
+    <p><a href="homepage.php">Go back to homepage</a></p>
 </body>
 </html>

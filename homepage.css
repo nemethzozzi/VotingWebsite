@@ -1,0 +1,167 @@
+/* style.css */
+
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #000000;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between; /* To push the logout link to the right corner */
+}
+
+.greeting {
+    order: 1;
+}
+
+.links {
+    order: 2;
+}
+
+.login-signup-container {
+    display: flex;
+    gap: 10px; /* Adjust the spacing between "Login" and "Signup" */
+}
+
+.login-link, .signup-link, .logout-link {
+    text-decoration: none; /* Remove the underline */
+    color: #fff; /* Set the text color to white */
+}
+
+.create-vote-container {
+    text-align: center; /* Center the content horizontally */
+    margin: 25px auto; /* Adjust top margin and center horizontally */
+    max-width: 150px; /* Set a maximum width for the container */
+}
+
+.create-vote-button {
+    display: inline-block; /* Use inline-block for the button */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #3498db;
+    color: #fff; /* Set text color to white */
+    font-weight: 600;
+    font-size: 18px;
+    margin: 0 auto; /* Center the button horizontally */
+}
+
+
+
+.votes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.vote {
+    width: 300px;
+    margin: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* Stack the buttons vertically */
+    justify-content: space-between; /* Push buttons to the bottom */
+}
+
+
+.vote-title {
+    color: #333;
+    margin: 15px 0 10px;
+}
+
+.vote-description {
+    margin-bottom: 10px;
+}
+
+.vote-start, .vote-end {
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    color: #333;
+    margin: 15px 0 10px;
+}
+
+.vote-form {
+    width: 100%;
+    text-align: center;
+}
+
+.participant-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+.primary-button {
+    margin: 0 auto;
+    width: 30%;
+    background: #3498db;
+    color: #fff;
+    cursor: pointer;
+}
+
+.create-vote-button:hover, .primary-button:hover {
+    background: #2980b9;
+}
+
+.login-signup-container, .logout-form {
+    display: inline; /* Display the button inline with other elements */
+    margin-left: 10px; /* Add some spacing to the left of the button */
+}
+
+.login-button, .signup-button, .logout-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.login-button:hover, .signup-button:hover, .logout-button:hover {
+    background-color: #2980b9;
+    text-decoration: none;
+}
+
+
+
+/* Add your additional styling here as needed */

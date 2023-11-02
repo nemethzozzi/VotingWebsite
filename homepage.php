@@ -20,100 +20,132 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="homepage.css">
     <title>Voting Website</title>
 </head>
 <body>
-    <?php
-    // Check if the user is logged in or not
-    if (isset($_SESSION['email'])) {
-        // User is logged in, display a link to logout.php
-        echo '<p>Hello ' . $_SESSION['username'] . '</p>';
-        echo '<a href="logout.php">Logout</a><br>';
-        echo '<a href="create_vote.php">Create a New Vote</a><br>';
+<header class="header">
+    <div class="greeting">
+        <?php
+        // Check if the user is logged in or not
+        if (isset($_SESSION['email'])) {
+            // User is logged in, display a greeting and the username
+            echo 'Hello ' . $_SESSION['username'];
+        }
+        ?>
+    </div>
+    <div class="links">
+        <?php
+        if (isset($_SESSION['email'])) {
+            // User is logged in, display the Logout link
+            echo '<form action="logout.php" method="post" class="logout-form">';
+            echo '<button type="submit" class="logout-button">Logout</button>';
+            echo '</form>';
+        } else {
+            // User is not logged in, display links to login.php and signup.php
+            echo '<div class="login-signup-container">';
+            echo '<button class="login-button"><a href="login.php">Login</a></button>';
+            echo '<button class="signup-button"><a href="signup.php">Signup</a></button>';
+            echo '</div>';
+        }
+        ?>
+    </div>
+</header>
 
-        // Display a list of available votes
-        $query = "SELECT * FROM szavazas";
-        $result = $conn->query($query);
+    <div class="create-vote-container">
+        <?php
+            if (isset($_SESSION['email'])) {
+                echo '</select>';
+                echo '<a class="create-vote-button" href="create_vote.php">Create Vote</a>';
+                echo '</form>';
 
-        if ($result->num_rows > 0) {
-            echo '<h2>Available Votes:</h2>';
-            while ($row = $result->fetch_assoc()) {
-                echo '<h3>' . $row['Megnevezes'] . '</h3>';
-                echo '<p>' . $row['Leiras'] . '</p<br>';
-                echo '<p>Indul: ' . $row['Indul'] . '</p>';
-                echo '<p>Zarul: ' . $row['Zarul'] . '</p>';
+            }
+        ?>
+    </div>
+    <div class="votes-container">
+        <?php
+        // Check if the user is logged in
+        if (isset($_SESSION['email'])) {
+            // User is logged in, display available votes
+            $query = "SELECT * FROM szavazas";
+            $result = $conn->query($query);
 
-                // Display voting results if the vote is closed
-                $currentDate = date('Y-m-d');
-                if ($currentDate > $row['Zarul']) {
-                    echo '<h3>Voting Results:</h3>';
-                    // Fetch and display voting results here
-                } else {
-                    // Voting form
-                    echo '<h3>Vote for a Participant:</h3>';
-                    echo '<form action="add_vote.php" method="post">';
-                    echo '<input type="hidden" name="vote_id" value="' . $row['Szavazas kod'] . '">';
-                    echo '<select name="selected_participant">';
-                    // Create options for participants here
-                    $participants = explode(',', $row['Jeloltek']);
-                    foreach ($participants as $participant) {
-                        echo '<option value="' . $participant . '">' . $participant . '</option>';
-                        $addParticipantQuery = "SELECT `Nev` FROM jelolt WHERE `Szavazas kod` = ?";
-                        if ($stmt = $conn->prepare($addParticipantQuery)) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo '<div class="vote">';
+                    echo '<h3 class="vote-title">' . $row['Megnevezes'] . '</h3>';
+                    echo '<p class="vote-description">' . $row['Leiras'] . '</p>';
+                    echo '<p class="vote-start">Starts: ' . $row['Indul'] . '</p>';
+                    echo '<p class="vote-end">Ends: ' . $row['Zarul'] . '</p>';
+
+                    // Check if the vote is closed
+                    $currentDate = date('Y-m-d');
+                    if ($currentDate > $row['Zarul']) {
+                        echo '<h3 class="section-title">Voting Results:</h3>';
+                        // Fetch and display voting results here
+                    } else {
+                        // Voting form
+                        echo '<h3 class="section-title">Vote for a Participant:</h3>';
+                        echo '<form action="add_vote.php" method="post" class="vote-form">';
+                        echo '<input type="hidden" name="vote_id" value="' . $row['Szavazas kod'] . '">';
+                        echo '<select name="selected_participant" class="participant-select">';
+
+                        // Retrieve newly added participants for this vote
+                        $newParticipantsQuery = "SELECT `Nev` FROM jelolt WHERE `Szavazas kod` = ?";
+                        if ($stmt = $conn->prepare($newParticipantsQuery)) {
                             $stmt->bind_param("i", $row['Szavazas kod']);
                             $stmt->execute();
-                            $participantsResult = $stmt->get_result();
-                            $stmt->close();
-                        }
-                        
-                        while ($participantRow = $participantsResult->fetch_assoc()) {
-                            echo '<option value="' . $participantRow['Nev'] . '">' . $participantRow['Nev'] . '</option>';
-                        }
-                    }
-                    echo '</select>';
-                    echo '<input type="submit" value="Vote">';
-                    echo '</form>';
+                            $newParticipantsResult = $stmt->get_result();
 
-                    echo '<a href="add_new_participant.php?vote_id=' . $row['Szavazas kod'] . '">Add New Participant</a>';
-                    echo '<a href="extend_date.php?vote_id=' . $row['Szavazas kod'] . '">Extend Date</a>';
-                    echo '<a href="delete_participant.php?vote_id=' . $row['Szavazas kod'] . '">Delete Participant</a>';
-                    echo '<a href="update_participant.php?vote_id=' . $row['Szavazas kod'] . '">Update Participant Data</a>';
-                    echo '<a href="withdraw_participant.php?vote_id=' . $row['Szavazas kod'] . '">Withdraw Participant</a>';  
-                    
+                            while ($newParticipantRow = $newParticipantsResult->fetch_assoc()) {
+                                // Combine and display the newly added participants
+                                echo '<option value="' . $newParticipantRow['Nev'] . '">' . $newParticipantRow['Nev'] . '</option>';
+                            }
+                        }
+
+                        echo '</select>';
+                        echo '<input type="submit" value="Vote" class="button primary-button">';
+                        echo '</form>';
+
+                        echo '<a href="add_new_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Add New Participant</a>';
+                        echo '<a href="extend_date.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Extend Date</a>';
+                        echo '<a href="delete_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Delete Participant</a>';
+                        echo '<a href="update_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Update Participant Data</a>';
+                        echo '<a href="withdraw_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Withdraw Participant</a>';
+                    }
+                    echo '</div>';
                 }
+            } else {
+                echo '<h2>No available votes.</h2>';
             }
         } else {
-            echo 'No available votes.';
-        }
-    } else {
-        // User is not logged in, display links to login.php and signup.php
-        echo '<li><a href="login.php">Login</a></li>';
-        echo '<li><a href="signup.php">Signup</a></li>';
-        
-        // Display a list of available votes for non-logged users
-        $query = "SELECT * FROM szavazas";
-        $result = $conn->query($query);
-        
-        if ($result->num_rows > 0) {
-            echo '<h2>Available Votes:</h2>';
-            while ($row = $result->fetch_assoc()) {
-                echo '<h3>' . $row['Megnevezes'] . '</h3>';
-                echo '<p>' . $row['Leiras'] . '</p><br>';
-                echo '<p>Indul: ' . $row['Indul'] . '</p>';
-                echo '<p>Zarul: ' . $row['Zarul'] . '</p';
-                
-                // Display voting results if the vote is closed
-                $currentDate = date('Y-m-d');
-                if ($currentDate > $row['Zarul']) {
-                    echo '<h3>Voting Results:</h3>';
-                    // Fetch and display voting results here
+
+
+            // Display a list of available votes for non-logged users
+            $query = "SELECT * FROM szavazas";
+            $result = $conn->query($query);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo '<div class="vote">';
+                    echo '<h3 class="vote-title">' . $row['Megnevezes'] . '</h3>';
+                    echo '<p class="vote-description">' . $row['Leiras'] . '</p>';
+                    echo '<p class="vote-start">Indul: ' . $row['Indul'] . '</p>';
+                    echo '<p class="vote-end">Zarul: ' . $row['Zarul'] . '</p>';
+
+                    // Check if the vote is closed
+                    $currentDate = date('Y-m-d');
+                    if ($currentDate > $row['Zarul']) {
+                        echo '<h3 class="section-title">Voting Results:</h3>';
+                        // Fetch and display voting results here
+                    }
+                    echo '</div>';
                 }
+            } else {
+                echo '<h2>No available votes.</h2>';
             }
-        } else {
-            echo 'No available votes.';
         }
-    }
-    ?>
+        ?>
+    </div>
 </body>
 </html>
