@@ -96,15 +96,19 @@ session_start();
                         echo '<select name="selected_participant" class="participant-select">';
 
                         // Retrieve newly added participants for this vote
-                        $newParticipantsQuery = "SELECT `Nev` FROM jelolt WHERE `Szavazas kod` = ?";
-                        if ($stmt = $conn->prepare($newParticipantsQuery)) {
-                            $stmt->bind_param("i", $row['Szavazas kod']);
-                            $stmt->execute();
-                            $newParticipantsResult = $stmt->get_result();
-
-                            while ($newParticipantRow = $newParticipantsResult->fetch_assoc()) {
-                                // Combine and display the newly added participants
-                                echo '<option value="' . $newParticipantRow['Nev'] . '">' . $newParticipantRow['Nev'] . '</option>';
+                        $participants = explode(',', $row['Jeloltek']);
+                        foreach ($participants as $participant) {
+                            echo '<option value="' . $participant . '">' . $participant . '</option>';
+                            $addParticipantQuery = "SELECT `Nev` FROM jelolt WHERE `Szavazas kod` = ?";
+                            if ($stmt = $conn->prepare($addParticipantQuery)) {
+                                $stmt->bind_param("i", $row['Szavazas kod']);
+                                $stmt->execute();
+                                $participantsResult = $stmt->get_result();
+                                $stmt->close();
+                            }
+                            
+                            while ($participantRow = $participantsResult->fetch_assoc()) {
+                                echo '<option value="' . $participantRow['Nev'] . '">' . $participantRow['Nev'] . '</option>';
                             }
                         }
 

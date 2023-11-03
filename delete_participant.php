@@ -29,6 +29,8 @@ if (!isset($_GET['vote_id'])) {
 
 $vote_id = $_GET['vote_id'];
 
+$successMessage = ""; // Initialize the success message variable
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if a participant is selected for deletion
     if (isset($_POST['participant_name'])) {
@@ -57,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <?php
-    if (isset($successMessage)) {
+    if (!empty($successMessage)) {
         echo '<p style="color: green;">' . $successMessage . '</p>';
         echo '<script>
         setTimeout(function(){
