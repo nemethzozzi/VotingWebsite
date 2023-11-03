@@ -1,27 +1,26 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['email'])) {
-    header('Location: login.php');
-    exit;
-}
-
+// Database connection setup
 $servername = "localhost";
 $username = "root";
 $password = "";
 $database = "szavazatszamlalo";
 
-// Create a database connection
+// Create a connection
 $conn = new mysqli($servername, $username, $password, $database);
 
-// Check for connection errors
+// Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$successMessage = "";
-$errorMessage = "";
+// Start the session (if not already started)
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php"); // Redirect to the login page if not logged in
+    exit;
+}
 
 // Fetch Jeloltek options from the jelolt table
 $jeloltOptions = "";
@@ -49,31 +48,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $indul = $_POST['indul'];
     $zarul = $_POST['zarul'];
 
-    // Validation: Ensure the selected Jelolt is not empty
-    if (empty($jeloltek)) {
-        $errorMessage = "Please select a Jelolt.";
-    } else {
-        // Insert the new vote into the database
-        $insertSql = "INSERT INTO szavazas (Megnevezes, Leiras, Jeloltek, Indul, Zarul, Email) VALUES (?, ?, ?, ?, ?, ?)";
-        if ($stmt = $conn->prepare($insertSql)) {
-            // Bind the parameters
-            $stmt->bind_param("ssssss", $megnevezes, $leiras, $jeloltek, $indul, $zarul, $_SESSION['email']);
-            if ($stmt->execute()) {
-                $successMessage = "Vote created successfully!";
-                $stmt->close();
+    // Insert the new vote into the database
+    $insertSql = "INSERT INTO szavazas (Megnevezes, Leiras, Jeloltek, Indul, Zarul, Email) VALUES (?, ?, ?, ?, ?, ?)";
+    if ($stmt = $conn->prepare($insertSql)) {
+        // Bind the parameters
+        $stmt->bind_param("ssssss", $megnevezes, $leiras, $jeloltek, $indul, $zarul, $_SESSION['email']);
+
+        // Execute the insert query
+        if ($stmt->execute()) {
+            // Get the auto-generated vote number
+            $voteNumber = $stmt->insert_id;
+
+            // Update the 'Szavazas kod' for the participants in the 'jelolt' table
+            $updateParticipantsSql = "UPDATE jelolt SET `Szavazas kod` = ? WHERE `Nev` = ?";
+            if ($updateStmt = $conn->prepare($updateParticipantsSql)) {
+                $updateStmt->bind_param("is", $voteNumber, $jeloltek);
+                if ($updateStmt->execute()) {
+                    // Participants' vote numbers updated successfully
+                    $successMessage = "Vote created successfully!";
+                } else {
+                    // Error while updating participants
+                    echo "Error updating participant vote numbers: " . $updateStmt->error;
+                }
+                $updateStmt->close();
             } else {
-                $errorMessage = "Error creating vote: " . $stmt->error;
-                $stmt->close();
+                // Error in preparing the update statement
+                echo "Error preparing the update statement: " . $conn->error;
             }
         } else {
-            $errorMessage = "Error preparing the SQL statement: " . $conn->error;
+            // Error while executing the query
+            echo "Error creating vote: " . $stmt->error;
         }
+        $stmt->close();
+    } else {
+        // Error in preparing the SQL statement
+        echo "Error preparing the SQL statement: " . $conn->error;
     }
 }
 
 // Close the database connection
 $conn->close();
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -83,16 +100,13 @@ $conn->close();
 </head>
 <body>
     <?php
-    if (!empty($successMessage)) {
+    if (isset($successMessage)) {
         echo '<p style="color: green;">' . $successMessage . '</p>';
         echo '<script>
         setTimeout(function(){
             window.location.href = "homepage.php";
         }, 2000);
         </script>';
-    }
-    if (!empty($errorMessage)) {
-        echo '<p style="color: red;">' . $errorMessage . '</p>';
     }
     ?>
     <form method="post" action="create_vote.php">
@@ -108,7 +122,7 @@ $conn->close();
             <option value="">Select a Jelolt</option>
             <?php echo $jeloltOptions; ?>
         </select>
-        <a href="add_participant.php">Add a Participant</a><br><br>
+        <a href="add_participant.php">Add a Participant</a><br><br> <!-- This line adds the "Add Participant" button -->
 
         <label for="indul">Indul dátuma:</label>
         <input type="date" name="indul" required><br><br>

@@ -1,5 +1,5 @@
 <?php
-// Database connection setup (same as your existing code)
+// Database connection setup
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -14,10 +14,6 @@ if ($conn->connect_error) {
 // Start the session (if not already started)
 session_start();
 
-// Initialize success and error messages
-$successMessage = "";
-$errorMessage = "";
-
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
     header('Location: login.php'); // Redirect to the login page if not logged in
@@ -31,7 +27,7 @@ $userEmail = $_SESSION['email'];
 if (isset($_GET['vote_id'])) {
     $voteID = $_GET['vote_id'];
 } else {
-    $errorMessage = "Vote ID is missing.";
+    echo "Vote ID is missing.";
     exit;
 }
 
@@ -53,28 +49,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->execute()) {
             $successMessage = "New participant added successfully.";
         } else {
-            $errorMessage = "Error adding new participant: " . $stmt->error;
+            echo "Error adding new participant: " . $stmt->error;
         }
         $stmt->close();
     }
 }
+
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <?php
-    if (!empty($successMessage)) {
+    if (isset($successMessage)) {
         echo '<p style="color: green;">' . $successMessage . '</p>';
         echo '<script>
         setTimeout(function(){
             window.location.href = "homepage.php";
         }, 2000);
         </script>';
-    }
-
-    if (!empty($errorMessage)) {
-        echo '<p style="color: red;">' . $errorMessage . '</p>';
     }
     ?>
     <link rel="stylesheet" type="text/css" href="style.css">

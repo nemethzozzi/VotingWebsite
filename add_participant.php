@@ -32,17 +32,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sssss", $name, $birthdate, $occupation, $program, $_SESSION['email']);
         if ($stmt->execute()) {
             $successMessage = "New participant added successfully!";
-            $stmt->close();
-            $conn->close();
         } else {
-            $errorMessage = "Error: " . $stmt->error;
-            $stmt->close();
-            $conn->close();
+            echo "Error: " . $stmt->error;
         }
+        $stmt->close();
     } else {
-        $errorMessage = "Error in preparing the SQL statement: " . $conn->error;
-        $conn->close();
+        echo "Error in preparing the SQL statement: " . $conn->error;
     }
+
+    $conn->close();
 }
 ?>
 
@@ -62,9 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }, 1500);
         </script>';
     }
-    if (isset($errorMessage)) {
-        echo '<p style="color: red;">' . $errorMessage . '</p>';
-    }
     ?>
     <form method="post" action="add_participant.php">
     <h2>Add Participant</h2>
@@ -76,5 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 
     <p><a href="homepage.php">Go back to homepage</a></p>
-</body>
+
+    </body>
 </html>

@@ -94,8 +94,7 @@ session_start();
                         echo '<form action="add_vote.php" method="post" class="vote-form">';
                         echo '<input type="hidden" name="vote_id" value="' . $row['Szavazas kod'] . '">';
                         echo '<select name="selected_participant" class="participant-select">';
-
-                        // Retrieve newly added participants for this vote
+                        
                         $participants = explode(',', $row['Jeloltek']);
                         foreach ($participants as $participant) {
                             echo '<option value="' . $participant . '">' . $participant . '</option>';
