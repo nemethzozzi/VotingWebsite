@@ -21,14 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $selected_participant = $_POST['selected_participant'];
 
         // Remove the selected participant from the specific vote
-        $removeParticipantQuery = "DELETE FROM jelolt WHERE `Szavazas kod` = ? AND `Nev` = ?";
-        if ($stmt = $conn->prepare($removeParticipantQuery)) {
+        $removeAssociationQuery = "UPDATE jelolt SET `Szavazas kod` = NULL WHERE `Szavazas kod` = ? AND `Nev` = ?";
+        if ($stmt = $conn->prepare($removeAssociationQuery)) {
             $stmt->bind_param("is", $vote_id, $selected_participant);
             $stmt->execute();
             $stmt->close();
             
-            $successMessage = "Participant '$selected_participant' has been succesfully withdrawed";
-
+            $successMessage = "Participant '$selected_participant' has been successfully withdrawn from the vote.";
         } else {
             echo "Error removing the participant from the vote.";
         }

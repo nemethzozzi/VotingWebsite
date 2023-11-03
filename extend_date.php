@@ -14,14 +14,9 @@ if ($conn->connect_error) {
 // Start the session (if not already started)
 session_start();
 
-// Initialize the success and error messages
-$successMessage = '';
-$errorMessage = '';
-
 // Check if the user is logged in and has the permission to extend the Zarul date
 if (isset($_SESSION['email'])) {
     // Check if the user can extend the "Zarul" date (implement your permission logic here)
-
     $canExtendDate = true; // Implement your permission logic here
 
     if ($canExtendDate) {
@@ -32,35 +27,48 @@ if (isset($_SESSION['email'])) {
             // Get the vote ID from the URL
             $voteID = $_GET['vote_id'];
 
-            // Update the "Zarul" date for the selected vote in the database
-            $updateQuery = "UPDATE szavazas SET Zarul = ? WHERE `Szavazas kod` = ?";
-            if ($stmt = $conn->prepare($updateQuery)) {
-                $stmt->bind_param("si", $newZarulDate, $voteID);
-                if ($stmt->execute()) {
-                    $successMessage = "Date extended successfully.";
-                } else {
-                    $errorMessage = "Error extending date: " . $stmt->error;
-                }
+            // Check if the new "Zarul" date is greater than the current "Ends" date
+            $checkEndDateQuery = "SELECT Zarul FROM szavazas WHERE `Szavazas kod` = ?";
+            if ($stmt = $conn->prepare($checkEndDateQuery)) {
+                $stmt->bind_param("i", $voteID);
+                $stmt->execute();
+                $stmt->bind_result($currentEndDate);
+                $stmt->fetch();
                 $stmt->close();
+
+                if (strtotime($newZarulDate) > strtotime($currentEndDate)) {
+                    // Update the "Zarul" date for the selected vote in the database
+                    $updateQuery = "UPDATE szavazas SET Zarul = ? WHERE `Szavazas kod` = ?";
+                    if ($stmt = $conn->prepare($updateQuery)) {
+                        $stmt->bind_param("si", $newZarulDate, $voteID);
+                        if ($stmt->execute()) {
+                            $successMessage =  "Date extended successfully.";
+                        } else {
+                            echo "Error extending date: " . $stmt->error;
+                        }
+                        $stmt->close();
+                    }
+                } else {
+                    echo "The new ends date must be higher than the current Ends date.";
+                }
             }
         }
     } else {
-        $errorMessage = "You do not have permission to extend the date.";
+        echo "You do not have permission to extend the date.";
     }
 } else {
-    $errorMessage = "Please log in to extend the date.";
+    echo "Please log in to extend the date.";
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <title>Extend Zarul Date</title>
+    <title>Extend Ends Date</title>
 </head>
 <body>
     <?php
-    if (!empty($successMessage)) {
+    if (isset($successMessage)) {
         echo '<p style="color: green;">' . $successMessage . '</p>';
         echo '<script>
         setTimeout(function(){
@@ -68,22 +76,15 @@ if (isset($_SESSION['email'])) {
         }, 2000);
         </script>';
     }
-
-    if (!empty($errorMessage)) {
-        echo '<p style="color: red;">' . $errorMessage . '</p>';
-    }
-    ?>
-
-    <?php
+    
     if ($canExtendDate) {
-        echo '<h2>Extend Date</h2>';
         echo '<form method="post" action="extend_date.php?vote_id=' . $_GET['vote_id'] . '">';
-        echo 'New Ends Date: <input type="date" name="new_zarul_date" required>';
+        echo '<h2>Extend Date</h2>';
+        echo 'New Zarul Date: <input type="date" name="new_zarul_date" required>';
         echo '<input type="submit" value="Extend Date">';
         echo '</form>';
     }
     ?>
-
     <p><a href="homepage.php">Go back to homepage</a></p>
 </body>
 </html>
