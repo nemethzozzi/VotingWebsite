@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("sssss", $name, $birthdate, $occupation, $program, $_SESSION['email']);
         if ($stmt->execute()) {
-            echo "New participant added successfully!";
+            $successMessage = "New participant added successfully!";
         } else {
             echo "Error: " . $stmt->error;
         }
@@ -41,11 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn->close();
-    echo '<script type="text/javascript">
-    setTimeout(function() {
-        window.location = "create_vote.php";
-    }, 1500);
-</script>';
 }
 ?>
 
@@ -56,9 +51,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Add Participant</title>
 </head>
 <body>
-    <h2>Add Participant</h2>
-
+    <?php
+    if (isset($successMessage)) {
+        echo '<p style="color: green;">' . $successMessage . '</p>';
+        echo '<script>
+        setTimeout(function(){
+            window.location.href = "create_vote.php";
+        }, 1500);
+        </script>';
+    }
+    ?>
     <form method="post" action="add_participant.php">
+    <h2>Add Participant</h2>
         Name: <input type="text" name="name" required><br><br>
         Birthdate: <input type="date" name="birthdate" required><br><br>
         Occupation: <input type="text" name="occupation" required><br><br>

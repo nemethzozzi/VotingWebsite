@@ -14,13 +14,17 @@ if ($conn->connect_error) {
 // Start the session (if not already started)
 session_start();
 
+// Initialize the success and error messages
+$successMessage = '';
+$errorMessage = '';
+
 // Check if the user is logged in and has the permission to extend the Zarul date
 if (isset($_SESSION['email'])) {
     // Check if the user can extend the "Zarul" date (implement your permission logic here)
-    
+
     $canExtendDate = true; // Implement your permission logic here
 
-    if ($canExtendDate) { // Replace with your permission logic
+    if ($canExtendDate) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Get the new "Zarul" date from the form
             $newZarulDate = $_POST['new_zarul_date'];
@@ -33,25 +37,18 @@ if (isset($_SESSION['email'])) {
             if ($stmt = $conn->prepare($updateQuery)) {
                 $stmt->bind_param("si", $newZarulDate, $voteID);
                 if ($stmt->execute()) {
-                    echo "Date extended successfully.";
+                    $successMessage = "Date extended successfully.";
                 } else {
-                    echo "Error extending date: " . $stmt->error;
+                    $errorMessage = "Error extending date: " . $stmt->error;
                 }
                 $stmt->close();
             }
-
-            // Redirect to homepage.php after displaying the message for 3 seconds
-            echo '<script>
-                setTimeout(function(){
-                    window.location.href = "homepage.php";
-                }, 3000);
-            </script>';
         }
     } else {
-        echo "You do not have permission to extend the date.";
+        $errorMessage = "You do not have permission to extend the date.";
     }
 } else {
-    echo "Please log in to extend the date.";
+    $errorMessage = "Please log in to extend the date.";
 }
 ?>
 
@@ -63,6 +60,21 @@ if (isset($_SESSION['email'])) {
 </head>
 <body>
     <?php
+    if (!empty($successMessage)) {
+        echo '<p style="color: green;">' . $successMessage . '</p>';
+        echo '<script>
+        setTimeout(function(){
+            window.location.href = "homepage.php";
+        }, 2000);
+        </script>';
+    }
+
+    if (!empty($errorMessage)) {
+        echo '<p style="color: red;">' . $errorMessage . '</p>';
+    }
+    ?>
+
+    <?php
     if ($canExtendDate) {
         echo '<h2>Extend Date</h2>';
         echo '<form method="post" action="extend_date.php?vote_id=' . $_GET['vote_id'] . '">';
@@ -71,6 +83,7 @@ if (isset($_SESSION['email'])) {
         echo '</form>';
     }
     ?>
+
     <p><a href="homepage.php">Go back to homepage</a></p>
 </body>
 </html>

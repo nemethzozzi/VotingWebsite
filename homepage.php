@@ -43,10 +43,15 @@ session_start();
             echo '</form>';
         } else {
             // User is not logged in, display links to login.php and signup.php
-            echo '<div class="login-signup-container">';
-            echo '<button class="login-button"><a href="login.php">Login</a></button>';
-            echo '<button class="signup-button"><a href="signup.php">Signup</a></button>';
-            echo '</div>';
+            echo '<a href="login.php" class="login-signup-container">';
+            echo '<button class="login-button">Login</button>';
+            echo '</a>';
+            
+            echo '<a href="signup.php" class="login-signup-container">';
+            echo '<button class="signup-button">Signup</button>';
+            echo '</a>';
+
+
         }
         ?>
     </div>
@@ -138,6 +143,7 @@ session_start();
                     if ($currentDate > $row['Zarul']) {
                         echo '<h3 class="section-title">Voting Results:</h3>';
                         // Fetch and display voting results here
+                        
                     }
                     echo '</div>';
                 }

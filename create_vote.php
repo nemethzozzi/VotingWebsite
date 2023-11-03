@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $updateStmt->bind_param("is", $voteNumber, $jeloltek);
                 if ($updateStmt->execute()) {
                     // Participants' vote numbers updated successfully
-                    echo "Vote created successfully!";
+                    $successMessage = "Vote created successfully!";
                 } else {
                     // Error while updating participants
                     echo "Error updating participant vote numbers: " . $updateStmt->error;
@@ -99,8 +99,18 @@ $conn->close();
     <title>Create Vote</title>
 </head>
 <body>
-    <h2>Create a New Vote</h2>
+    <?php
+    if (isset($successMessage)) {
+        echo '<p style="color: green;">' . $successMessage . '</p>';
+        echo '<script>
+        setTimeout(function(){
+            window.location.href = "homepage.php";
+        }, 2000);
+        </script>';
+    }
+    ?>
     <form method="post" action="create_vote.php">
+    <h2>Create a New Vote</h2>
         <label for="megnevezes">Megnevezés:</label>
         <input type="text" name="megnevezes" required><br><br>
 

@@ -64,9 +64,8 @@ if (isset($_GET['vote_id'])) {
     <title>Update Participant Data</title>
 </head>
 <body>
-    <h2>Update Participant Data for Vote</h2>
     <?php
-    if ($updateSuccess) {
+        if ($updateSuccess) {
         echo '<p style="color: green;">Participant data updated successfully.</p>';
         echo '<script>
             setTimeout(function(){
@@ -76,6 +75,7 @@ if (isset($_GET['vote_id'])) {
     }
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <h2>Update Participant Data for Vote</h2>
         <input type="hidden" name="vote_id" value="<?php echo $vote_id; ?>">
         <label for="selected_participant">Select Participant:</label>
         <select name="selected_participant">
@@ -100,6 +100,7 @@ if (isset($_GET['vote_id'])) {
 
         <input type="submit" value="Update Participant Data">
     </form>
+
     <p><a href="homepage.php">Go back to homepage</a></p>
 </body>
 </html>

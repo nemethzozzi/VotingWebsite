@@ -27,9 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
             $stmt->close();
             
-            // Redirect back to the homepage or any other appropriate page
-            header("Location: homepage.php");
-            exit();
+            $successMessage = "Participant '$selected_participant' has been succesfully withdrawed";
+
         } else {
             echo "Error removing the participant from the vote.";
         }
@@ -64,8 +63,18 @@ if (isset($_GET['vote_id'])) {
     <title>Withdraw Participant</title>
 </head>
 <body>
-    <h2>Withdraw Participant from Vote</h2>
+    <?php
+    if (isset($successMessage)) {
+        echo '<p style="color: green;">' . $successMessage . '</p>';
+        echo '<script>
+        setTimeout(function(){
+            window.location.href = "homepage.php";
+        }, 2000);
+        </script>';
+    }
+    ?>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <h2>Withdraw Participant from Vote</h2>
         <input type="hidden" name="vote_id" value="<?php echo $vote_id; ?>" readonly><br><br>
 
         <label for="selected_participant">Select Participant to Withdraw:</label>

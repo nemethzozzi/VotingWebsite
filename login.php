@@ -66,8 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
 </head>
 <body>
-    <h2>Login Form</h2>
     <form method="post" action="login.php">
+    <h2>Login Form</h2>
         <label for="email">Email:</label>
         <input type="email" name="email" required><br><br>
 
@@ -75,9 +75,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" name="password" required><br><br>
 
         <input type="submit" value="Login">
+
+        <p>Don't have an account? <a href="signup.php">Signup Now!</a></p>
     </form>
 
-    <p>Don't have an account? <a href="signup.php">Signup Now!</a></p>
+    
     <p><a href="homepage.php">Go back to homepage</a></p>
 
 </body>

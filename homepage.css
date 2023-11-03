@@ -1,5 +1,3 @@
-/* style.css */
-
 /* Reset default styles */
 * {
     margin: 0;
@@ -16,12 +14,13 @@ body {
 }
 
 header {
-    background-color: #000000;
+    background-color: #3498db;
     color: #fff;
     padding: 10px 20px;
     text-align: center;
     display: flex;
-    justify-content: space-between; /* To push the logout link to the right corner */
+    justify-content: space-between;
+    align-items: center; /* Vertically center-align elements */
 }
 
 .greeting {
@@ -37,9 +36,23 @@ header {
     gap: 10px; /* Adjust the spacing between "Login" and "Signup" */
 }
 
-.login-link, .signup-link, .logout-link {
-    text-decoration: none; /* Remove the underline */
-    color: #fff; /* Set the text color to white */
+.login-signup-container, .logout-form {
+    display: inline; /* Display the button inline with other elements */
+    margin-left: 10px; /* Add some spacing to the left of the button */
+}
+
+.login-button, .signup-button, .logout-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: none;
 }
 
 .create-vote-container {
@@ -62,7 +75,9 @@ header {
     margin: 0 auto; /* Center the button horizontally */
 }
 
-
+.create-vote-button:hover, .primary-button:hover {
+    background: #2980b9;
+}
 
 .votes-container {
     display: flex;
@@ -135,32 +150,7 @@ header {
     cursor: pointer;
 }
 
-.create-vote-button:hover, .primary-button:hover {
-    background: #2980b9;
-}
 
-.login-signup-container, .logout-form {
-    display: inline; /* Display the button inline with other elements */
-    margin-left: 10px; /* Add some spacing to the left of the button */
-}
-
-.login-button, .signup-button, .logout-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    text-decoration: none;
-    background-color: #3498db;
-    color: #fff;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 18px;
-}
-
-.login-button:hover, .signup-button:hover, .logout-button:hover {
-    background-color: #2980b9;
-    text-decoration: none;
-}
 
 
 

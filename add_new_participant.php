@@ -47,16 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt = $conn->prepare($insertQuery)) {
         $stmt->bind_param("sissss", $newParticipantName, $voteID, $birthdate, $occupation, $program, $userEmail);
         if ($stmt->execute()) {
-            echo "New participant added successfully.";
+            $successMessage = "New participant added successfully.";
         } else {
             echo "Error adding new participant: " . $stmt->error;
         }
         $stmt->close();
-        echo '<script type="text/javascript">
-        setTimeout(function() {
-            window.location = "homepage.php";
-        }, 3000);
-        </script>';
     }
 }
 
@@ -65,12 +60,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
 <head>
+    <?php
+    if (isset($successMessage)) {
+        echo '<p style="color: green;">' . $successMessage . '</p>';
+        echo '<script>
+        setTimeout(function(){
+            window.location.href = "homepage.php";
+        }, 2000);
+        </script>';
+    }
+    ?>
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Add New Participant</title>
 </head>
 <body>
-    <h2>Add New Participant</h2>
     <form method="post" action="add_new_participant.php?vote_id=<?php echo $voteID; ?>">
+    <h2>Add New Participant</h2>
         New Participant Name: <input type="text" name="new_participant_name" required><br><br>
         Birthdate: <input type="date" name="birthdate" required><br><br>
         Occupation: <input type="text" name="occupation" required><br><br>

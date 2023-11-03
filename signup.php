@@ -43,9 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo '<script>
                         setTimeout(function() {
                             window.location.href = "login.php";
-                        }, 2000); // Redirect to login.php after 2 seconds
+                        }, 2000);
                     </script>';
-                    exit; // Ensure no further processing of the script
+                    exit;
                 } else {
                     echo "Sign Up failed. Please try again later.";
                 }
@@ -64,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Sign Up</title>
 </head>
 <body>
-    <h2>Sign Up Form</h2>
-    <form method="post" action="signup.php"> 
+    <form method="post" action="signup.php">
+        <h2>Sign Up Form</h2> 
         <label for="email">Email:</label>
         <input type="email" name="email" required><br><br>
 
@@ -78,10 +78,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="password_confirm">Confirm Password:</label>
         <input type="password" name="password_confirm" required><br><br>
 
-        <input type="submit" value="Register">
+        <input type="submit" value="Signup">
+
+        <p>Already have an account? <a href="login.php">Login Now!</a></p>
     </form>
 
-    <p>Already have an account? <a href="login.php">Login Now!</a></p>
     <p><a href="homepage.php">Go back to homepage</a></p>
 </body>
 </html>
