@@ -70,7 +70,7 @@ if (isset($_GET['vote_id'])) {
         echo '<script>
             setTimeout(function(){
                 window.location.href = "homepage.php";
-            }, 3000);
+            }, 2000);
         </script>';
     }
     ?>

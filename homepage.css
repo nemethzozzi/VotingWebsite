@@ -124,7 +124,7 @@ header {
 }
 
 .participant-select {
-    width: 100%;
+    width: 30%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -145,13 +145,89 @@ header {
 .primary-button {
     margin-top: 10px;
     margin: 0 auto;
-    width: 30%;
+    width: 15%;
     background: #3498db;
     color: #fff;
     cursor: pointer;
 }
 
+/* Additional styles for the modified layout */
 
+.vote {
+    width: 80%;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.voting {
+    width: 40%;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 10%;
+    position: relative; /* Added to use as a reference for absolute positioning */
+}
+
+.vote-links {
+    width: 30%;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute; /* Positioned absolutely relative to the parent .szavazas */
+    margin-top: 0 auto;
+    margin-left: 40%;
+}
+
+.result {
+    width: 35%;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 13%;
+    margin-top: 5%;
+}
+
+.non-logged-vote {
+    width: 20%;
+    padding: 20px;
+    margin-top: 20px;
+    margin-left: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.non-logged-voting {
+    width: 80%; /* Adjust the width as needed */
+    padding: 20px;
+    margin: 0 auto; /* Center horizontally */
+    text-align: center;
+}
+
+.non-logged-result {
+    width: 80%; /* Adjust the width as needed */
+    padding: 20px;
+    margin: 0 auto; /* Center horizontally */
+    text-align: center;
+}
 
 
 
