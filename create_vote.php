@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $insertSql = "INSERT INTO szavazas (Megnevezes, Leiras, Jeloltek, Indul, Zarul, Email) VALUES (?, ?, ?, ?, ?, ?)";
     if ($stmt = $conn->prepare($insertSql)) {
         // Bind the parameters
-        $stmt->bind_param("ssssss", $megnevezes, $leiras, $jeloltek, $indul, $zarul, $_SESSION['email']);
+        $stmt->bind_param("ssssss", $megnevezes, $leiras, $jeloltek[0], $indul, $zarul, $_SESSION['email']); // Use the first participant
 
         // Execute the insert query
         if ($stmt->execute()) {
@@ -62,13 +62,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Update the 'Szavazas kod' for the participants in the 'jelolt' table
             $updateParticipantsSql = "UPDATE jelolt SET `Szavazas kod` = ? WHERE `Nev` = ?";
             if ($updateStmt = $conn->prepare($updateParticipantsSql)) {
-                $updateStmt->bind_param("is", $voteNumber, $jeloltek);
-                if ($updateStmt->execute()) {
-                    // Participants' vote numbers updated successfully
-                    $successMessage = "Vote created successfully!";
-                } else {
-                    // Error while updating participants
-                    echo "Error updating participant vote numbers: " . $updateStmt->error;
+                foreach ($jeloltek as $participant) {
+                    $updateStmt->bind_param("is", $voteNumber, $participant);
+                    if ($updateStmt->execute()) {
+                        // Participants' vote numbers updated successfully
+                        $successMessage = "Vote created successfully!";
+                    } else {
+                        // Error while updating participants
+                        echo "Error updating participant vote numbers: " . $updateStmt->error;
+                    }
                 }
                 $updateStmt->close();
             } else {
@@ -90,13 +92,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-
-
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Create Vote</title>
+    <script>
+        // Function to add a new participant selection
+        function addParticipant() {
+            var selectContainer = document.getElementById('participantContainer');
+            var newSelect = document.createElement('select');
+            newSelect.name = 'jeloltek[]';
+            newSelect.innerHTML = '<?php echo $jeloltOptions; ?>';
+            selectContainer.appendChild(newSelect);
+
+            if (selectContainer.childElementCount > 1) {
+            var deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.textContent = 'Delete Participant';
+            deleteButton.onclick = function() {
+                selectContainer.removeChild(newSelect);
+                selectContainer.removeChild(deleteButton);
+            };
+            selectContainer.appendChild(deleteButton);
+        }
+        }
+    </script>
 </head>
 <body>
     <?php
@@ -118,11 +139,13 @@ $conn->close();
         <textarea name="leiras" required></textarea><br><br>
 
         <label for="jeloltek">Jelöltek:</label>
-        <select name="jeloltek" required>
-            <option value="">Select a Jelolt</option>
-            <?php echo $jeloltOptions; ?>
-        </select>
-        <a href="add_participant.php">Add a Participant</a><br><br> <!-- This line adds the "Add Participant" button -->
+        <div id="participantContainer">
+            <select name="jeloltek[]" required>
+                <option value="">Select a Jelolt</option>
+                <?php echo $jeloltOptions; ?>
+            </select>
+            <button type="button" onclick="addParticipant()">Add Participant</button><br><br>
+        </div>
 
         <label for="indul">Indul dátuma:</label>
         <input type="date" name="indul" required><br><br>

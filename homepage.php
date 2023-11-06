@@ -136,6 +136,7 @@ session_start();
                     $results = $stmt->get_result();
                     $stmt->close();
                     if ($results->num_rows > 0) {
+                        echo '<h2 class="vote-result">Vote Result</h2>';
                         echo '<table>';
                         echo '<tr>';
                         echo '<th>Jelolt</th>';
@@ -156,7 +157,8 @@ session_start();
                 
                 // Links on the right side
                 echo '<div class="vote-links">';
-                echo '<a href="add_new_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Add New Participant</a>';
+                echo '<a href="add_new_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Create New Participant</a>';
+                echo '<a href="add_participant_to_vote.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Add Participant</a>';
                 echo '<a href="extend_date.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Extend Date</a>';
                 echo '<a href="delete_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Delete Participant</a>';
                 echo '<a href="update_participant.php?vote_id=' . $row['Szavazas kod'] . '" class="button">Update Participant Data</a>';
@@ -192,6 +194,7 @@ session_start();
                     $results = $stmt->get_result();
                     $stmt->close();
                     if ($results->num_rows > 0) {
+                        echo '<h2 class="vote-result">Vote Result</h2>';
                         echo '<table>';
                         echo '<tr>';
                         echo '<th>Jelolt</th>';

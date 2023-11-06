@@ -33,15 +33,36 @@ label {
     margin-bottom: 6px;
 }
 
-input[type="email"],
 input[type="text"],
-input[type="password"] {
+textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+button[type="button"] {
+    background-color: #ff6b6b;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="button"]:hover {
+    background-color: #ff4b4b;
 }
 
 input[type="submit"] {
@@ -98,8 +119,5 @@ h3 {
 p {
     margin-bottom: 10px;
 }
-
-
-
 
 /* Add your additional styling here as needed */
