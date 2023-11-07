@@ -108,7 +108,7 @@ $conn->close();
 
             if (selectContainer.childElementCount > 1) {
             var deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
+            deleteButton.type = 'delete-button';
             deleteButton.textContent = 'Delete Participant';
             deleteButton.onclick = function() {
                 selectContainer.removeChild(newSelect);
