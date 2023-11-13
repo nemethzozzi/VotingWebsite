@@ -49,33 +49,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $zarul = $_POST['zarul'];
 
     // Insert the new vote into the database
-    $insertSql = "INSERT INTO szavazas (Megnevezes, Leiras, Jeloltek, Indul, Zarul, Email) VALUES (?, ?, ?, ?, ?, ?)";
+    $insertSql = "INSERT INTO szavazas (Megnevezes, Leiras, Indul, Zarul, Email) VALUES (?, ?, ?, ?, ?)";
     if ($stmt = $conn->prepare($insertSql)) {
         // Bind the parameters
-        $stmt->bind_param("ssssss", $megnevezes, $leiras, $jeloltek[0], $indul, $zarul, $_SESSION['email']); // Use the first participant
+        $stmt->bind_param("sssss", $megnevezes, $leiras, $indul, $zarul, $_SESSION['email']);
 
         // Execute the insert query
         if ($stmt->execute()) {
             // Get the auto-generated vote number
             $voteNumber = $stmt->insert_id;
 
-            // Update the 'Szavazas kod' for the participants in the 'jelolt' table
-            $updateParticipantsSql = "UPDATE jelolt SET `Szavazas kod` = ? WHERE `Nev` = ?";
-            if ($updateStmt = $conn->prepare($updateParticipantsSql)) {
-                foreach ($jeloltek as $participant) {
-                    $updateStmt->bind_param("is", $voteNumber, $participant);
-                    if ($updateStmt->execute()) {
-                        // Participants' vote numbers updated successfully
-                        $successMessage = "Vote created successfully!";
+            // Duplicate participants for the new vote in the 'jelolt' table
+            foreach ($jeloltek as $participant) {
+                $duplicateParticipantSql = "INSERT INTO jelolt (`Szavazas kod`, `Nev`, `Szuletesi datum`, `Foglalkozas`, `Program`, `Email`) 
+                                            SELECT ?, `Nev`, `Szuletesi datum`, `Foglalkozas`, `Program`, `Email` 
+                                            FROM jelolt WHERE `Nev` = ?";
+                $duplicateStmt = $conn->prepare($duplicateParticipantSql);
+
+                if ($duplicateStmt) {
+                    $duplicateStmt->bind_param("is", $voteNumber, $participant);
+                    if ($duplicateStmt->execute()) {
+                        // Participant duplicated successfully
+                        $successMessage = "Vote and Participants created successfully!";
                     } else {
-                        // Error while updating participants
-                        echo "Error updating participant vote numbers: " . $updateStmt->error;
+                        // Error while duplicating participant
+                        echo "Error duplicating participant: " . $duplicateStmt->error;
                     }
+                    $duplicateStmt->close();
+                } else {
+                    // Error in preparing the duplicate statement
+                    echo "Error preparing the duplicate statement: " . $conn->error;
                 }
-                $updateStmt->close();
-            } else {
-                // Error in preparing the update statement
-                echo "Error preparing the update statement: " . $conn->error;
             }
         } else {
             // Error while executing the query
@@ -87,6 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error preparing the SQL statement: " . $conn->error;
     }
 }
+
+
 
 // Close the database connection
 $conn->close();
@@ -146,6 +152,8 @@ $conn->close();
             </select>
             <button type="button" onclick="addParticipant()">Add Participant</button><br><br>
         </div>
+        <p><a href="add_participant.php">Add new Participant</a></p>
+
 
         <label for="indul">Indul dátuma:</label>
         <input type="date" name="indul" required><br><br>

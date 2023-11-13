@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $selected_participant = $_POST['selected_participant'];
 
         // Remove the selected participant from the specific vote
-        $removeAssociationQuery = "UPDATE jelolt SET `Szavazas kod` = NULL WHERE `Szavazas kod` = ? AND `Nev` = ?";
+        $removeAssociationQuery = "UPDATE jelolt SET `Szavazas kod` = NULL WHERE `Jelolt kod` = ? AND `Nev` = ?";
         if ($stmt = $conn->prepare($removeAssociationQuery)) {
             $stmt->bind_param("is", $vote_id, $selected_participant);
             $stmt->execute();
