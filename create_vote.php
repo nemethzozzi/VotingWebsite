@@ -49,11 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $zarul = $_POST['zarul'];
 
     // Insert the new vote into the database
-    $insertSql = "INSERT INTO szavazas (Megnevezes, Leiras, Indul, Zarul, Email) VALUES (?, ?, ?, ?, ?)";
+    $insertSql = "INSERT INTO szavazas (Megnevezes, Leiras, Indul, Zarul, Email, Jeloltek) VALUES (?, ?, ?, ?, ?, ?)";
     if ($stmt = $conn->prepare($insertSql)) {
-        // Bind the parameters
-        $stmt->bind_param("sssss", $megnevezes, $leiras, $indul, $zarul, $_SESSION['email']);
 
+        $selectedParticipants = implode(",", $jeloltek);
+        $stmt->bind_param("ssssss", $megnevezes, $leiras, $indul, $zarul, $_SESSION['email'], $selectedParticipants);
+        
         // Execute the insert query
         if ($stmt->execute()) {
             // Get the auto-generated vote number

@@ -1,20 +1,6 @@
 <?php
-// Database connection setup
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "szavazatszamlalo";
-
-// Create a connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Start the session (if not already started)
 session_start();
+
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
     header('Location: login.php');
@@ -22,6 +8,23 @@ if (!isset($_SESSION['email'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $birthdate = $_POST['birthdate'];
+    $occupation = $_POST['occupation'];
+    $program = $_POST['program'];
+
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "szavazatszamlalo";
+
+    // Create a database connection
+    $conn = new mysqli($servername, $username, $password, $database);
+
+    // Check for connection errors
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
 
     // Prepare and execute SQL statement to insert a new participant
     $sql = "INSERT INTO jelolt (`Nev`, `Szuletesi datum`, `Foglalkozas`, `Program`, `Email`) VALUES (?, ?, ?, ?, ?)";
