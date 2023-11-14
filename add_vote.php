@@ -1,14 +1,5 @@
 <?php
-// Start a session
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php"); // Redirect to the login page if not logged in
-    exit;
-}
-
-// Database connection setup (replace with your database credentials)
+// Database connection setup
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -20,6 +11,15 @@ $conn = new mysqli($servername, $username, $password, $database);
 // Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+
+// Start the session (if not already started)
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php"); // Redirect to the login page if not logged in
+    exit;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

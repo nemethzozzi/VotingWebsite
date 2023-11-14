@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2023. Nov 03. 13:27
+-- Létrehozás ideje: 2023. Nov 14. 12:48
 -- Kiszolgáló verziója: 10.4.28-MariaDB
 -- PHP verzió: 8.2.4
 
@@ -39,11 +39,11 @@ CREATE TABLE `felhasznalo` (
 --
 
 INSERT INTO `felhasznalo` (`Felhasznalonev`, `Email`, `Jelszo`, `Legutobbi belepes`) VALUES
-('zozzi', '11zozzi11@gmail.com', '$2y$10$gyu4U5nAQ6mVbopUAj6BpuYb7OF9VXlFy0l1BI9W2XmsYQCMmpVFi', '2023-11-03'),
-('asd', 'asd@mail.com', '$2y$10$0VoFppYuCKJ9LLjJpOWPgOzgtk5a89yttLNxIrSvLQOje4oJ/MJdq', '2023-11-03'),
-('asd2', 'asd2@mail.com', '$2y$10$NJcs5tn8jkEYyTA4SobfaOfzS8SbnpREVDwjDums9lHDTWoYcwDqW', '2023-11-03'),
-('Proba', 'proba@mail.com', '$2y$10$Zg8TvX3ajqADZWHxS0GOeuXYUNTpF7zoMl6FYIE9ngLoKIpt9LP2q', '2023-11-01'),
-('Proba2', 'proba2@mail.com', '$2y$10$YA.yD5TWUGwNAkt82m002edQi/.6Z3pG9ahGBlnMkE5vZrSAO5JZu', '2023-11-01');
+('felhasznalo1', 'felhasznalo1@gmail.com', '$2y$10$pceYqRGpg0mEQzQY9JOpdOg0dXLUK6KQQuTLGlwSlcdcEOiIlyfDi', '2023-11-14'),
+('felhasznalo2', 'felhasznalo2@gmail.com', '$2y$10$8fh8bpTSSo9GLG8iW/nFQOWDeYyvKdLPg1CL.j5mlNFXeD1C.YUw6', '2023-11-14'),
+('felhasznalo3', 'felhasznalo3@gmail.com', '$2y$10$b2OwFkUBfUVEGUR5nkqicu1iyDhyZN0xw3VMz0u7wpvXpI0IZeVWi', '2023-11-14'),
+('felhasznalo4', 'felhasznalo4@gmail.com', '$2y$10$pNbNSozphbGiwsWIsdP0Xel4expk5nanwAqHXCv7cppjpkU3csdqa', '2023-11-14'),
+('felhasznalo5', 'felhasznalo5@gmail.com', '$2y$10$c5JLjhdD5Tedxh1fpcEfR.ZKsgeomRkINY5zkeR9FeoFvPm2QMzpK', '2023-11-14');
 
 -- --------------------------------------------------------
 
@@ -66,10 +66,12 @@ CREATE TABLE `jelolt` (
 --
 
 INSERT INTO `jelolt` (`Jelolt kod`, `Nev`, `Szuletesi datum`, `Foglalkozas`, `Program`, `Szavazas kod`, `Email`) VALUES
-(1, '1Jelolt', '2000-10-11', 'ASD', 'asd', 28, 'asd@mail.com'),
-(3, '2Jelolt', '2005-10-10', 'adasd', 'asdasd', 29, 'asd2@mail.com'),
-(4, '3Jelolt', '1980-04-22', 'asdad', 'asdas', 30, 'asd2@mail.com'),
-(6, '3Hozzaadott', '2000-02-20', 'asdsad', 'asdasdd', 31, '11zozzi11@gmail.com');
+(1, 'Participant1', '2000-10-10', 'Occupation1', 'Program1', NULL, 'felhasznalo1@gmail.com'),
+(2, 'Participant2', '1980-05-20', 'Occupation2', 'Program2', NULL, 'felhasznalo1@gmail.com'),
+(3, 'Participant3', '2001-10-20', 'Occupation3', 'Program3', NULL, 'felhasznalo1@gmail.com'),
+(4, 'Participant4', '1979-05-11', 'Occupation4', 'Program4', NULL, 'felhasznalo1@gmail.com'),
+(5, 'Participant5', '1979-05-18', 'Occupation5', 'Program5', NULL, 'felhasznalo1@gmail.com'),
+(6, 'Participant6', '2002-05-24', 'Occupation6', 'Program6', NULL, 'felhasznalo1@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -87,16 +89,6 @@ CREATE TABLE `szavazas` (
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
---
--- A tábla adatainak kiíratása `szavazas`
---
-
-INSERT INTO `szavazas` (`Megnevezes`, `Leiras`, `Jeloltek`, `Indul`, `Zarul`, `Szavazas kod`, `Email`) VALUES
-('1Szavazas', 'asdasd', '1Jelolt', '2023-10-10', '2025-12-10', 28, 'asd@mail.com'),
-('2Szavazas', 'ASDASDASDSAd', '2Jelolt', '2021-12-31', '2022-12-30', 29, 'asd2@mail.com'),
-('3Szavazas', 'asdasd', '3Jelolt', '2023-10-17', '2023-10-20', 30, 'asd2@mail.com'),
-('UjSzavazas', 'asdasdas', '3Hozzaadott', '2023-10-20', '2023-11-10', 31, '11zozzi11@gmail.com');
-
 -- --------------------------------------------------------
 
 --
@@ -112,16 +104,6 @@ CREATE TABLE `szavazat` (
   `Szavazas kod` int(6) DEFAULT NULL,
   `Email` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
-
---
--- A tábla adatainak kiíratása `szavazat`
---
-
-INSERT INTO `szavazat` (`Felhasznalonev`, `Melyik szavazas`, `Melyik jeloltre`, `Idopont`, `Szavazat kod`, `Szavazas kod`, `Email`) VALUES
-('asd', '28', '1Jelolt', '2023-11-03', 1, 28, 'asd@mail.com'),
-('asd2', '28', '1Hozzaadott', '2023-11-03', 2, 28, 'asd2@mail.com'),
-('asd2', '29', '2Jelolt', '2023-11-03', 3, 29, 'asd2@mail.com'),
-('zozzi', '31', '3Hozzaadott', '2023-11-03', 4, 31, '11zozzi11@gmail.com');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -181,7 +163,7 @@ ALTER TABLE `szavazas`
 -- AUTO_INCREMENT a táblához `szavazat`
 --
 ALTER TABLE `szavazat`
-  MODIFY `Szavazat kod` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Szavazat kod` int(6) NOT NULL AUTO_INCREMENT;
 
 --
 -- Megkötések a kiírt táblákhoz

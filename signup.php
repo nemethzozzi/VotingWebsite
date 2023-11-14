@@ -1,16 +1,20 @@
 <?php
+// Database connection setup
 $servername = "localhost";
-$username = "root"; 
-$password = ""; 
+$username = "root";
+$password = "";
 $database = "szavazatszamlalo";
 
-// Create a database connection
+// Create a connection
 $conn = new mysqli($servername, $username, $password, $database);
 
-// Check for connection errors
+// Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Start the session (if not already started)
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];

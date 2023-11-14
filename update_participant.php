@@ -13,6 +13,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Start the session (if not already started)
 session_start();
 
 $updateSuccess = false; // Variable to track the update success

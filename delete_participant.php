@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 // Database connection setup
 $servername = "localhost";
 $username = "root";
@@ -14,6 +12,10 @@ $conn = new mysqli($servername, $username, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+// Start the session (if not already started)
+session_start();
+
 
 // Check if the user is logged in
 if (!isset($_SESSION['email'])) {
