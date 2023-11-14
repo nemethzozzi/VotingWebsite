@@ -50,8 +50,6 @@ session_start();
             echo '<a href="signup.php" class="login-signup-container">';
             echo '<button class="signup-button">Signup</button>';
             echo '</a>';
-
-
         }
         ?>
     </div>
@@ -63,7 +61,6 @@ session_start();
             echo '</select>';
             echo '<a class="create-vote-button" href="create_vote.php">Create Vote</a>';
             echo '</form>';
-
         }
     ?>
 </div>
@@ -182,7 +179,7 @@ session_start();
                 echo '<h3 class="vote-title">' . $row['Megnevezes'] . '</h3>';
                 echo '<p class="vote-description">' . $row['Leiras'] . '</p>';
                 echo '<p class="vote-start">Starts: ' . $row['Indul'] . '</p>';
-                echo '<p class "vote-end">Ends: ' . $row['Zarul'] . '</p>';
+                echo '<p class="vote-end">Ends: ' . $row['Zarul'] . '</p>';
                 echo '</div>';
 
                 echo '<div class="non-logged-result">';
@@ -213,11 +210,170 @@ session_start();
                 }
                 echo '</div>';
                 echo '</div>'; // Close the vote container
-
             }
         } else {
             echo '<h2>No available votes.</h2>';
         }
+    }
+    ?>
+</div>
+
+
+<div class="sql-import-container">
+    <?php
+    // Your SQL query
+    $sql_import_votes = 'SELECT
+            s.`Megnevezes` AS SzavazasMegnevezes,
+            j.`Nev` AS JeloltNev,
+            COUNT(sz.`Szavazat kod`) AS SzavazatokSzama
+        FROM
+            `szavazat` sz
+        JOIN
+            `szavazas` s ON sz.`Szavazas kod` = s.`Szavazas kod`
+        JOIN
+            `jelolt` j ON sz.`Melyik jeloltre` = j.`Nev`
+        WHERE
+            sz.`Idopont` BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() AND s.`Zarul` < CURDATE()
+        GROUP BY
+            s.`Megnevezes`, j.`Nev`
+        ORDER BY
+            s.`Megnevezes`, SzavazatokSzama DESC;';
+
+    // Execute the query
+    $result = $conn->query($sql_import_votes);
+
+    // Check for errors
+    if (!$result) {
+        echo "Error fetching vote results: " . $conn->error;
+    } else {
+        // Display the results in a table
+        echo '<table border="1">';
+        echo '<tr><th>Szavazás Megnevezése</th><th>Jelölt Neve</th><th>Szavazatok Száma</th></tr>';
+        while ($row = $result->fetch_assoc()) {
+            echo '<tr>';
+            echo '<td>' . $row['SzavazasMegnevezes'] . '</td>';
+            echo '<td>' . $row['JeloltNev'] . '</td>';
+            echo '<td>' . $row['SzavazatokSzama'] . '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+    ?>
+</div>
+
+
+<div class="sql-import-container">
+    <?php
+    // Your SQL query
+    $sql_import_participants = 'SELECT
+            j.`Nev` AS JeloltNev,
+            j.`Foglalkozas` AS Foglalkozas,
+            s.`Megnevezes` AS SzavazasMegnevezes,
+            s.`Indul` AS SzavazasKezdete,
+            s.`Zarul` AS SzavazasVege
+        FROM
+            `jelolt` j
+        JOIN
+            `szavazas` s ON j.`Szavazas kod` = s.`Szavazas kod`
+        ORDER BY
+            j.`Nev`, s.`Indul`;';
+
+    // Execute the query
+    $result = $conn->query($sql_import_participants);
+
+    // Check for errors
+    if (!$result) {
+        echo "Error fetching participant information: " . $conn->error;
+    } else {
+        // Display the results in a table
+        echo '<table border="1">';
+        echo '<tr><th>Jelölt Neve</th><th>Foglalkozás</th><th>Szavazás Megnevezése</th><th>Szavazás Kezdete</th><th>Szavazás Vége</th></tr>';
+        while ($row = $result->fetch_assoc()) {
+            echo '<tr>';
+            echo '<td>' . $row['JeloltNev'] . '</td>';
+            echo '<td>' . $row['Foglalkozas'] . '</td>';
+            echo '<td>' . $row['SzavazasMegnevezes'] . '</td>';
+            echo '<td>' . $row['SzavazasKezdete'] . '</td>';
+            echo '<td>' . $row['SzavazasVege'] . '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+    ?>
+</div>
+
+
+<div class="sql-import-container">
+    <?php
+    // Your SQL query
+    $sql_import_upcoming_vote = 'SELECT
+            Megnevezes,
+            Jeloltek,
+            Zarul AS LezarasIdeje
+        FROM
+            szavazas
+        WHERE
+            Zarul >= CURDATE()
+        ORDER BY
+            Zarul DESC
+        LIMIT 1;';
+
+    // Execute the query
+    $result = $conn->query($sql_import_upcoming_vote);
+
+    // Check for errors
+    if (!$result) {
+        echo "Error fetching upcoming vote information: " . $conn->error;
+    } else {
+        // Display the results
+        while ($row = $result->fetch_assoc()) {
+            echo '<p>Megnevezés: ' . $row['Megnevezes'] . '</p>';
+            echo '<p>Jelöltek: ' . $row['Jeloltek'] . '</p>';
+            echo '<p>Lezárás Ideje: ' . $row['LezarasIdeje'] . '</p>';
+        }
+    }
+    ?>
+</div>
+
+<div class="sql-import-container">
+    <?php
+    $sql_import_vote_statistics = 'SELECT
+            YEAR(Idopont) AS Ev,
+            MONTH(Idopont) AS Honap,
+            COUNT(*) AS SzavazatokSzama
+        FROM
+            szavazat
+        WHERE
+            Idopont >= \'2020-01-01\'
+        GROUP BY
+            Ev, Honap
+        ORDER BY
+            Ev, Honap;';
+
+    // Execute the query
+    $result = $conn->query($sql_import_vote_statistics);
+
+    // Check for errors
+    if (!$result) {
+        echo "Error fetching vote statistics: " . $conn->error;
+    } else {
+        // Display the results in a table
+        echo '<table border="1">
+                <tr>
+                    <th>Év</th>
+                    <th>Hónap</th>
+                    <th>Szavazatok Száma</th>
+                </tr>';
+
+        while ($row = $result->fetch_assoc()) {
+            echo '<tr>';
+            echo '<td>' . $row['Ev'] . '</td>';
+            echo '<td>' . $row['Honap'] . '</td>';
+            echo '<td>' . $row['SzavazatokSzama'] . '</td>';
+            echo '</tr>';
+        }
+
+        echo '</table>';
     }
     ?>
 </div>

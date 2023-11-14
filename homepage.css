@@ -230,5 +230,54 @@ header {
 }
 
 
+.sql-import-container {
+    width: 80%;
+    margin: 20px auto; /* Adjust the margin as needed */
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sql-import-container table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.sql-import-container th, .sql-import-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.sql-import-container th {
+    background-color: #f2f2f2;
+}
+
+/* Style for the upcoming vote information */
+.sql-import-container p {
+    margin-bottom: 10px;
+}
+
+/* Style for the participant details */
+.sql-import-container .imported-participant {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.sql-import-container .imported-participant-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sql-import-container .imported-participant-occupation {
+    color: #888;
+}
 
 /* Add your additional styling here as needed */
