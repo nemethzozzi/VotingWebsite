@@ -82,7 +82,7 @@ if (isset($_SESSION['email'])) {
     if ($canExtendDate) {
         echo '<form method="post" action="extend_date.php?vote_id=' . $_GET['vote_id'] . '">';
         echo '<h2>Extend Date</h2>';
-        echo 'New Zarul Date: <input type="date" name="new_zarul_date" required>';
+        echo 'New Ends Date: <input type="date" name="new_zarul_date" required>';
         echo '<input type="submit" value="Extend Date">';
         echo '</form>';
     }
